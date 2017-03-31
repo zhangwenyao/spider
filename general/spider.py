@@ -18,11 +18,10 @@ def crawl(list, outfolder, date, d2=None):
         date2 = date1 - 1 + 3600 * 24
         filename = 'data/{}/{}/{}.csv'.format(list, outfolder, date)
     url = '{}/{}/{}-{}'.format(systemconfig.api, list, date1, date2)
-    print(url)
+    print('crawl url: ', url)
+    print('save as: ', filename)
 
     html = requests.get(url)
-    with open('test/4.html', 'w') as f:
-        f.write(html.text)
     soup = BeautifulSoup(html.text, 'lxml')
 
     f = open(filename, 'w')
