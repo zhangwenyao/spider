@@ -1,6 +1,12 @@
 {
-    "api":  "http://www.zhaihehe.com/?/lists_month",
+    "api":{
+        "month":    "http://www.zhaihehe.com/?/lists_month",
+        "week":    "http://www.zhaihehe.com/?/lists_week",
+        "day":    "http://www.zhaihehe.com/?/lists",
+        "other":    "http://www.zhaihehe.com/?/lists_month"
+    },
     "lists": {
+        "全部": "0",
         "映客": "4",
         "花椒": "5",
         "一直播":   "6",

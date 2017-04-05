@@ -11,9 +11,11 @@ def main_parser(argv):
                         version='%(prog)s 1.0')
     parser.add_argument('-c', '--config', nargs='?', default='config/api.json',
                         type=argparse.FileType('r'), help='specify the configuration file.')
-    parser.add_argument('-l', '--list', nargs='?', default='4',
+    parser.add_argument('-l', '--list', nargs='?', default='0',
                         help="specify the list which will be operated on.")
-    parser.add_argument('-o', '--outfolder', nargs='?', default='day',
+    parser.add_argument('-t', '--type', nargs='?', default='day',
+                        help="specify the type which will be operated on.")
+    parser.add_argument('-o', '--outfolder', nargs='?',
                         help="specify where to save the output file in data/${list}.")
     parser.add_argument('-d', '--date', nargs='?', default='20170101',
                         help="specify the date in '20170101' form.")
@@ -53,15 +55,25 @@ def main(argv=sys.argv[1:]):
         print('Valid List:\n\t', systemconfig.lists)
         return None
 
-    outfolder = ['day', 'week', 'month']
-    if args.outfolder not in outfolder:
-        print("Outfolder has to be set properly with -o/--outfolder.")
-        print('Valid List:\n\t', outfolder)
+    type = ['d', 'day', 'w', 'week', 'm', 'month', 'o', 'other']
+    if args.type not in type:
+        print("Type has to be set properly with -y/--type.")
+        print('Valid List:\n\t', type)
+        return None
+    elif args.type == 'other' and not args.date2:
+        print("Date2 has to be set properly with -2/--date2.")
+        return None
+
+    if len(args.date) != 8:
+        print("Date has to be set properly in '20170101' form.")
+        return None
+    if args.date2 and len(args.date2) != 8:
+        print("Date has to be set properly in '20170101' form.")
         return None
 
     from general.spider import crawl
-    crawl(list=args.list, outfolder=args.outfolder,
-          date=args.date, d2=args.date2)
+    crawl(list=args.list, type=args.type, date=args.date,
+          date2=args.date2, outfolder=args.outfolder)
 
     return
 
