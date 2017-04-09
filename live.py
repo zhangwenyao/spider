@@ -15,7 +15,11 @@ def main_parser(argv):
                         help="specify the list which will be operated on.")
     parser.add_argument('-t', '--type', nargs='?', default='day',
                         help="specify the type which will be operated on.")
-    parser.add_argument('-o', '--outfolder', nargs='?',
+    parser.add_argument('-i', '--infolder', nargs='?',
+                        help="specify the folder to import data.")
+    parser.add_argument('-o', '--outfile', nargs='?',
+                        help="specify the filename of the output file.")
+    parser.add_argument('--outfolder', nargs='?',
                         help="specify where to save the output file in data/${list}.")
     parser.add_argument('-d', '--date', nargs='?', default='20170101',
                         help="specify the date in '20170101' form.")
@@ -55,27 +59,35 @@ def main(argv=sys.argv[1:]):
         print('Valid List:\n\t', systemconfig.lists)
         return None
 
-    type = ['d', 'day', 'w', 'week', 'm', 'month', 'o', 'other']
+    type = ['d', 'day', 'w', 'week', 'm', 'month', 'o', 'other',
+            'a', 'analysis']
     if args.type not in type:
         print("Type has to be set properly with -y/--type.")
         print('Valid List:\n\t', type)
         return None
-    elif args.type == 'other' and not args.date2:
-        print("Date2 has to be set properly with -2/--date2.")
+
+    if args.type in ('d', 'day', 'w', 'week', 'm', 'month', 'o', 'other'):
+        if args.type == 'other' and not args.date2:
+            print("Date2 has to be set properly with -2/--date2.")
+            return None
+        if len(args.date) != 8:
+            print("Date has to be set properly in '20170101' form.")
+            return None
+        if args.date2 and len(args.date2) != 8:
+            print("Date has to be set properly in '20170101' form.")
+            return None
+        from general.spider import crawl
+        crawl(list=args.list, type=args.type, date=args.date,
+              date2=args.date2, outfolder=args.outfolder)
         return None
 
-    if len(args.date) != 8:
-        print("Date has to be set properly in '20170101' form.")
-        return None
-    if args.date2 and len(args.date2) != 8:
-        print("Date has to be set properly in '20170101' form.")
+    if args.type in ('a', 'analysis'):
+        from general.analysis import analysis
+        analysis(*args.params, list=args.list, infolder=args.infolder,
+                 outfile=args.outfile, outfolder=args.outfolder)
         return None
 
-    from general.spider import crawl
-    crawl(list=args.list, type=args.type, date=args.date,
-          date2=args.date2, outfolder=args.outfolder)
-
-    return
+    return None
 
 if __name__ == "__main__":
     main()
