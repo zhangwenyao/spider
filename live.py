@@ -15,6 +15,8 @@ def main_parser(argv):
                         help="specify the list which will be operated on.")
     parser.add_argument('-t', '--type', nargs='?', default='day',
                         help="specify the type which will be operated on.")
+    parser.add_argument('--listname', nargs='?', default='0',
+                        help="specify the listname which will be operated on.")
     parser.add_argument('-i', '--infolder', nargs='?',
                         help="specify the folder to import data.")
     parser.add_argument('-o', '--outfile', nargs='?',
@@ -83,7 +85,7 @@ def main(argv=sys.argv[1:]):
 
     if args.type in ('a', 'analysis'):
         from general.analysis import analysis
-        analysis(*args.params, list=args.list, infolder=args.infolder,
+        analysis(list=args.list, listname=args.listname, infolder=args.infolder,
                  outfile=args.outfile, outfolder=args.outfolder)
         return None
 
