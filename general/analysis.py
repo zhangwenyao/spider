@@ -19,7 +19,6 @@ def analysis(list, listname, infolder, outfile, outfolder=None):
         print(fldin, l, files)
         return
     files.sort()
-    print(files)
 
     if not outfolder:
         outfolder = 'analysis'
@@ -33,13 +32,15 @@ def analysis(list, listname, infolder, outfile, outfolder=None):
         with open(fldin + file) as f:
             f_csv = csv.DictReader(f)
             if infolder in ('day', 'week'):
-                d = [file[:8]]
+                h = ['{}-{}-{}'.format(file[0:4],file[4:6],file[6:8])]
             elif infolder == 'month':
-                d = [file[:6]]
+                h = ['{}-{}'.format(file[0:4],file[4:6])]
+            elif infolder.endswith('.csv'):
+                h = [infolder[0:-4]]
             else:
-                d = [file]
-            d.extend([row[listname] for row in f_csv])
-            if len(d) <= 1:
+                h = [file]
+            d = [row[listname] for row in f_csv]
+            if len(d) < 1:
                 print('error: file {} is empty.'.format(file))
                 continue
             if n == 0:
@@ -47,7 +48,10 @@ def analysis(list, listname, infolder, outfile, outfolder=None):
             if n != len(d):
                 print('error: length of file {} is not {}.'.format(file, n))
                 continue
-            data.append(d)
+            h.append(sum([int(x) for x in d]))
+            h.extend(d)
+            data.append(h)
+            print(file)
 
     print('save as:', fld + outfile)
     with open(fld + outfile, 'w') as f:
