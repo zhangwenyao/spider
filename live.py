@@ -27,6 +27,16 @@ def main_parser(argv):
                         help="specify the date in '20170101' form.")
     parser.add_argument('-2', '--date2', nargs='?',
                         help="specify the date in '20170101' form.")
+    parser.add_argument('--city', nargs='?', default='0',
+                        help="specify the city which will be operated on.")
+    parser.add_argument('--sex', nargs='?', default='0',
+                        help="specify the sex which will be operated on.")
+    parser.add_argument('--fans', nargs='?', default='0',
+                        help="specify the fans which will be operated on.")
+    parser.add_argument('--range1', nargs='?', default='0',
+                        help="specify the range1 which will be operated on.")
+    parser.add_argument('--range2', nargs='?', default='0',
+                        help="specify the range2 which will be operated on.")
     parser.add_argument('params', nargs='*',
                         help='Different from action to action.')
 
@@ -36,13 +46,12 @@ def main_parser(argv):
     return parser.parse_args(argv)
 
 import json
-from general import config as systemconfig
+from general import config as sc
 
 
 def main_load_config(args):
     data = json.load(args.config)
-    systemconfig.api = data['api']
-    systemconfig.lists = data['lists']
+    sc.config = data.copy()
 
 import sys
 
@@ -55,14 +64,14 @@ def main(argv=sys.argv[1:]):
     main_load_config(args)
 
     if args.list is None \
-       or (args.list not in systemconfig.lists.keys()
-            and args.list not in systemconfig.lists.values()):
+       or (args.list not in sc.config['list'].keys()
+            and args.list not in sc.config['list'].values()):
         print("List has to be set properly with -l/--list.")
-        print('Valid List:\n\t', systemconfig.lists)
+        print('Valid List:\n\t', sc.config['lists'])
         return None
 
     type = ['d', 'day', 'w', 'week', 'm', 'month', 'o', 'other',
-            'a', 'analysis']
+            'a', 'analysis', 'anchor']
     if args.type not in type:
         print("Type has to be set properly with -y/--type.")
         print('Valid List:\n\t', type)
@@ -87,6 +96,31 @@ def main(argv=sys.argv[1:]):
         from general.analysis import analysis
         analysis(list=args.list, listname=args.listname, infolder=args.infolder,
                  outfile=args.outfile, outfolder=args.outfolder)
+        return None
+
+    if args.type in ('anchor'):
+        if args.city is None \
+           or (args.city not in sc.config['city'].keys()
+                and args.city not in sc.config['city'].values()):
+            print("City has to be set properly with --city.")
+            print('Valid City:\n\t', sc.config['city'])
+            return None
+        if args.sex is None \
+           or (args.sex not in sc.config['sex'].keys()
+                and args.sex not in sc.config['sex'].values()):
+            print("Sex has to be set properly with --sex.")
+            print('Valid Sex:\n\t', sc.config['sex'])
+            return None
+        if args.fans is None \
+           or (args.city not in sc.config['fans'].keys()
+                and args.fans not in sc.config['fans'].values()):
+            print("Fans has to be set properly with --fans.")
+            print('Valid Fans:\n\t', sc.config['fans'])
+            return None
+        from general.anchor import anchor
+        anchor(outfile=args.outfile, list=args.list, city=args.city,
+               sex=args.sex, fans=args.fans, outfolder=args.outfolder,
+               range1=args.range1, range2=args.range2)
         return None
 
     return None
