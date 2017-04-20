@@ -9,19 +9,18 @@ from bs4 import BeautifulSoup
 from general import config as sc
 
 
-def anchor(outfile=None, list=0, city=0, sex=0, fans=0, outfolder=None,
-           range1=0, range2=0):
+def anchor(date=None, list='0', city='0', sex='0', fans='0', outfolder=None,
+           range1='0', range2='0'):
     if not outfolder:
         outfolder = 'anchor'
-    fld = 'data/{}'.format(outfolder)
+    fld = 'data/{}/{}'.format(list, outfolder)
     if not os.path.exists(fld):
         os.mkdir(fld)
-    filename = outfile if outfile else (
+    filename = date if date else (
         datetime.datetime.today() - datetime.timedelta(days=1)).strftime("%Y-%m-%d")
     url = '{}_{}_{}_{}'.format(list, city, sex, fans)
     if list or city or sex or fans:
         filename += '.' + url
-    fn = '{}/{}.1.txt'.format(fld, filename)
 
     url = '{}/{}'.format(sc.config['api']['anchor'], url)
     print('crawl url:', url)
@@ -30,10 +29,12 @@ def anchor(outfile=None, list=0, city=0, sex=0, fans=0, outfolder=None,
     num = str(soup.find('li', {'id': 'Page_End'}))
     num = re.sub("[\s\S]*p=", '', num)
     num = re.sub('"[\s\S]*', '', num)
-    num = int(num)
-    print(num, 'pages')
+    num = int(num) if num != 'None' else 0
+    print('Num of pages:', num)
 
+    range1 = int(range1)
     if range1 == 0:
+        fn = '{}/{}.1.txt'.format(fld, filename)
         print('save as:', fn)
         with open(fn, 'w') as f:
             head = soup.find("div", {"id": "table_title"})
@@ -43,7 +44,8 @@ def anchor(outfile=None, list=0, city=0, sex=0, fans=0, outfolder=None,
                 f.write(anchor_row(row))
         range1 = 2
 
-    if range2 == 0:
+    range2 = int(range2)
+    if range2 == 0 or range2 > num:
         range2 = num
     for i in range(range1, range2):
         url2 = '{}/&p={}'.format(url, i)

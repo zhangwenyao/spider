@@ -2,13 +2,14 @@
 # -*- coding: utf-8 -*-
 
 import time
+import datetime
 import calendar
 import re
 import requests
 import os
 from bs4 import BeautifulSoup
 import csv
-from general import config as systemconfig
+from general import config as sc
 
 
 def crawl(list, type, date, date2=None, outfolder=None):
@@ -21,7 +22,7 @@ def crawl(list, type, date, date2=None, outfolder=None):
         (d['year'], d['month'], d['day'], -8, 0, 0, 0, 0, 0)))
 
     if type in ('d', 'day'):
-        url = '{}/{}/{:0>4d}-{:0>2d}-{:0>2d}'.format(systemconfig.api['day'], list,
+        url = '{}/{}/{:0>4d}-{:0>2d}-{:0>2d}'.format(sc.config['api']['day'], list,
                                                      d['year'], d['month'], d['day'])
         if not outfolder:
             outfolder = 'day'
@@ -29,18 +30,21 @@ def crawl(list, type, date, date2=None, outfolder=None):
         filename = '{}/{}.csv'.format(fld, date)
 
     elif type in ('w', 'week'):
-        if not date2:
-            print('error: need date2.')
-            return None
-        d2 = {
-            'year': int(date2[0:4]),
-            'month': int(date2[4:6]),
-            'day': int(date2[6:8])
-        }
-        d2['time'] = calendar.timegm(time.struct_time(
-            (d2['year'], d2['month'], d2['day'], -8, 0, 0, 0, 0, 0)))
-        url = '{}/{}/{}-{}'.format(systemconfig.api['week'], list,
-                                   d['time'], d2['time'])
+        d1 = datetime.date(d['year'], d['month'], d['day'])
+        if d1.weekday():
+            d1 -= datetime.timedelta(days=d1.weekday())
+            date = d1.strftime("%Y%m%d")
+            d = {
+                'year': int(date[0:4]),
+                'month': int(date[4:6]),
+                'day': int(date[6:8])
+            }
+            d['time'] = calendar.timegm(time.struct_time(
+                (d['year'], d['month'], d['day'], -8, 0, 0, 0, 0, 0)))
+        time2 = d['time'] + 3600 * 24 * 6
+        date2 = (d1 + datetime.timedelta(days=6)).strftime("%Y%m%d")
+        url = '{}/{}/{}-{}'.format(sc.config['api']['week'], list,
+                                   d['time'], time2)
         if not outfolder:
             outfolder = 'week'
         fld = 'data/{}/{}'.format(list, outfolder)
@@ -53,10 +57,10 @@ def crawl(list, type, date, date2=None, outfolder=None):
         d2 = {
             'year': d['year'],
             'month': d['month'],
-            'day': calendar.monthrange(int(d['year']), int(d['month']))[1]
+            'day': calendar.monthrange(d['year'], d['month'])[1]
         }
         d2['time'] = d['time'] + 3600 * 24 * int(d2['day']) - 1
-        url = '{}/{}/{}-{}'.format(systemconfig.api['month'], list,
+        url = '{}/{}/{}-{}'.format(sc.config['api']['month'], list,
                                    d['time'], d2['time'])
         if not outfolder:
             outfolder = 'month'
@@ -76,7 +80,7 @@ def crawl(list, type, date, date2=None, outfolder=None):
         }
         d2['time'] = calendar.timegm(time.struct_time(
             (d2['year'], d2['month'], d2['day'], 24 - 8, 0, 0, 0, 0, 0))) - 1
-        url = '{}/{}/{}-{}'.format(systemconfig.api['month'], list,
+        url = '{}/{}/{}-{}'.format(sc.config['api']['month'], list,
                                    d['time'], d2['time'])
         if not outfolder:
             outfolder = 'other'
