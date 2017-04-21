@@ -4,7 +4,7 @@
 import sys
 import json
 import argparse
-from general import config as sc
+from general import config as systemconfig
 
 
 def main_parser(argv):
@@ -16,10 +16,10 @@ def main_parser(argv):
                         help='specify the web to crawl.')
     parser.add_argument('-c', '--config', nargs='?',
                         help='specify the configuration file.')
-    parser.add_argument('-l', '--list', nargs='?',
-                        help="specify the list which will be operated on.")
     parser.add_argument('-t', '--type', nargs='?',
                         help="specify the type which will be operated on.")
+    parser.add_argument('-l', '--list', nargs='?',
+                        help="specify the list which will be operated on.")
     parser.add_argument('--listname', nargs='?', default='0',
                         help="specify the listname which will be operated on.")
     parser.add_argument('-i', '--infile', nargs='?',
@@ -34,6 +34,10 @@ def main_parser(argv):
                         help="specify the date in '20170101' form.")
     parser.add_argument('-2', '--date2', nargs='?',
                         help="specify the date in '20170101' form.")
+    parser.add_argument('--rankType', nargs='?',
+                        help="specify the rankType which will be operated on.")
+    parser.add_argument('--dateType', nargs='?',
+                        help="specify the dateType which will be operated on.")
     parser.add_argument('--city', nargs='?',
                         help="specify the city which will be operated on.")
     parser.add_argument('--sex', nargs='?',
@@ -55,7 +59,7 @@ def main_parser(argv):
 
 def main_load_config(args):
     with open(args.config, 'r') as f:
-        sc.config = json.load(f)
+        systemconfig.config = json.load(f)
     return
 
 

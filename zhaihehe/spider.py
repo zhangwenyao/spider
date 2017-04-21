@@ -9,7 +9,9 @@ import requests
 import os
 from bs4 import BeautifulSoup
 import csv
-from general import config as sc
+from general import config as systemconfig
+
+config = systemconfig.config
 
 
 def crawl(list, type, date, date2=None, outfolder=None):
@@ -22,7 +24,7 @@ def crawl(list, type, date, date2=None, outfolder=None):
         (d['year'], d['month'], d['day'], -8, 0, 0, 0, 0, 0)))
 
     if type in ('d', 'day'):
-        url = '{}/{}/{:0>4d}-{:0>2d}-{:0>2d}'.format(sc.config['api']['day'], list,
+        url = '{}/{}/{:0>4d}-{:0>2d}-{:0>2d}'.format(config['api']['day'], list,
                                                      d['year'], d['month'], d['day'])
         if not outfolder:
             outfolder = 'day'
@@ -43,7 +45,7 @@ def crawl(list, type, date, date2=None, outfolder=None):
                 (d['year'], d['month'], d['day'], -8, 0, 0, 0, 0, 0)))
         time2 = d['time'] + 3600 * 24 * 6
         date2 = (d1 + datetime.timedelta(days=6)).strftime("%Y%m%d")
-        url = '{}/{}/{}-{}'.format(sc.config['api']['week'], list,
+        url = '{}/{}/{}-{}'.format(config['api']['week'], list,
                                    d['time'], time2)
         if not outfolder:
             outfolder = 'week'
@@ -60,7 +62,7 @@ def crawl(list, type, date, date2=None, outfolder=None):
             'day': calendar.monthrange(d['year'], d['month'])[1]
         }
         d2['time'] = d['time'] + 3600 * 24 * int(d2['day']) - 1
-        url = '{}/{}/{}-{}'.format(sc.config['api']['month'], list,
+        url = '{}/{}/{}-{}'.format(config['api']['month'], list,
                                    d['time'], d2['time'])
         if not outfolder:
             outfolder = 'month'
@@ -80,7 +82,7 @@ def crawl(list, type, date, date2=None, outfolder=None):
         }
         d2['time'] = calendar.timegm(time.struct_time(
             (d2['year'], d2['month'], d2['day'], 24 - 8, 0, 0, 0, 0, 0))) - 1
-        url = '{}/{}/{}-{}'.format(sc.config['api']['month'], list,
+        url = '{}/{}/{}-{}'.format(config['api']['month'], list,
                                    d['time'], d2['time'])
         if not outfolder:
             outfolder = 'other'

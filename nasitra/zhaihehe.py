@@ -2,7 +2,9 @@
 # -*- coding: utf-8 -*-
 
 import datetime
-from general import config as sc
+from general import config as systemconfig
+
+config = systemconfig.config
 
 
 def zhaihehe(args):
@@ -17,10 +19,10 @@ def zhaihehe(args):
 
     if not args.list:
         args.list = '0'
-    if args.list not in sc.config['list'].keys() \
-       and args.list not in sc.config['list'].values():
+    if args.list not in config['list'].keys() \
+       and args.list not in config['list'].values():
         print("List has to be set properly with -l/--list.")
-        print('Valid List:\n\t', sc.config['lists'])
+        print('Valid List:\n\t', config['lists'])
         return
 
     if not args.date:
@@ -51,24 +53,24 @@ def zhaihehe(args):
     if args.type in ('anchor'):
         if not args.city:
             args.city = '0'
-        if args.city not in sc.config['city'].keys() \
-           and args.city not in sc.config['city'].values():
+        if args.city not in config['city'].keys() \
+           and args.city not in config['city'].values():
             print("City has to be set properly with --city.")
-            print('Valid City:\n\t', sc.config['city'])
+            print('Valid City:\n\t', config['city'])
             return
         if not args.sex:
             args.sex = '0'
-        if args.sex not in sc.config['sex'].keys() \
-           and args.sex not in sc.config['sex'].values():
+        if args.sex not in config['sex'].keys() \
+           and args.sex not in config['sex'].values():
             print("Sex has to be set properly with --sex.")
-            print('Valid Sex:\n\t', sc.config['sex'])
+            print('Valid Sex:\n\t', config['sex'])
             return
         if not args.fans:
             args.fans = '0'
-        if args.fans not in sc.config['fans'].keys() \
-           and args.fans not in sc.config['fans'].values():
+        if args.fans not in config['fans'].keys() \
+           and args.fans not in config['fans'].values():
             print("Fans has to be set properly with --fans.")
-            print('Valid Fans:\n\t', sc.config['fans'])
+            print('Valid Fans:\n\t', config['fans'])
             return
         from zhaihehe.anchor import anchor
         return anchor(date=args.date, list=args.list, city=args.city,
