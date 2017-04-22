@@ -11,7 +11,7 @@ def talkingdata(args):
 
     type = config['type']
     if not args.type:
-        args.type = 'app'
+        args.type = type[0]
     if args.type not in type:
         print("Type has to be set properly with -t/--type.")
         print('Valid Type:\n\t', type)
@@ -51,6 +51,11 @@ def talkingdata(args):
     if args.type == 'wx':
         from talkingdata.wx import crawl
         return crawl(type=args.type, typeId=args.list, date=args.date,
+                     outfile=args.outfile, outfolder=args.outfolder)
+
+    if args.type == 'appstore':
+        from talkingdata.appstore import crawl
+        return crawl(type=args.type, typeId=args.list, rankType=args.rankType, date=args.date,
                      outfile=args.outfile, outfolder=args.outfolder)
 
     print('Type error:', args.type)

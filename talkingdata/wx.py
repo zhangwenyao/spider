@@ -30,7 +30,7 @@ def crawl(type, typeId, date, outfile, outfolder):
     api = '{}/{}'.format(config['web'], config[type]['api'])
     if int(typeId) > 0:
         api += '?typeId=' + typeId
-    print('app crawl:', api)
+    print(type, 'crawl:', api)
     data = requests.get(api).text
     if not data or len(data) < 4:
         print('data is empty')
