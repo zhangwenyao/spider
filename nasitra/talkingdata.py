@@ -37,7 +37,7 @@ def talkingdata(args):
                 li.extend([i for i in v])
     if not args.list and li:
         args.list = str(min([int(i) for i in li]))
-    if args.list not in li:
+    if li and args.list not in li:
         print("List has to be set properly with -l/--list.")
         print('Valid List:\n\t', li)
         return
@@ -62,6 +62,11 @@ def talkingdata(args):
         from talkingdata.terminals import crawl
         return crawl(type=args.type, terminalType=args.list, platform=args.rankType,
                      date=args.date, dateType=args.dateType,
+                     outfile=args.outfile, outfolder=args.outfolder)
+
+    if args.type == 'market':
+        from talkingdata.market import crawl
+        return crawl(type=args.type, date=args.date,
                      outfile=args.outfile, outfolder=args.outfolder)
 
     print('Type error:', args.type)
