@@ -11,13 +11,16 @@ from general import config as systemconfig
 config = systemconfig.config
 
 
-def crawl(type, typeId, rankType, date, dateType, outfile, outfolder):
-    if not rankType:
-        rankType = 'a'
-    if rankType not in config[type]['rankType']:
-        print("RankType has to be set properly with --rankType.")
-        print('Valid RankType:\n\t', config[type]['rankType'])
-        return
+def crawl(type, terminalType, platform, date, dateType, outfile, outfolder):
+    if terminalType == '1':
+        platform = '3'
+    else:
+        if not platform:
+            platform = '2'
+        if platform not in ('1', '2'):
+            print("Platform has to be set properly with --rankType.")
+            print('Valid Platform:\n\t', ('1', '2'))
+            return
 
     if not dateType:
         dateType = 'w'
@@ -49,10 +52,9 @@ def crawl(type, typeId, rankType, date, dateType, outfile, outfolder):
 
     api = '{}/{}?date={:0>4d}-{:0>2d}-{:0>2d}'.format(
         config['web'], config[type]['api'], d['year'], d['month'], d['day'])
-    if int(typeId) > 0:
-        api += '&typeId=' + typeId
-    api += '&rankType=' + rankType
     api += '&dateType=' + dateType
+    api += '&platform=' + platform
+    api += '&terminalType=' + terminalType
     print(type, 'crawl:', api)
     data = requests.get(api).text
     if not data or len(data) < 4:
@@ -66,11 +68,11 @@ def crawl(type, typeId, rankType, date, dateType, outfile, outfolder):
         os.mkdir(fld)
     if not outfile:
         outfile = '{}.{}.{}.{}.txt'.format(
-            date, typeId, rankType, dateType)
+            date, terminalType, platform, dateType)
     filename = os.path.join(fld, outfile)
     print('save as:', filename)
     with open(filename, 'w') as f:
-        data = re.sub('},{', '}\n{', data[1:-1]).split('\n')
+        data = re.sub('}\s*,\s*{', '}\n{', data[1:-1]).split('\n')
         head = list(json.loads(data[0]).keys())
         head.sort()
         f.write('\t'.join(head) + '\n')

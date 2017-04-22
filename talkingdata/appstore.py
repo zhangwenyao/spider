@@ -11,7 +11,7 @@ config = systemconfig.config
 
 def crawl(type, typeId, rankType, date, outfile, outfolder):
     if not rankType:
-        rankType = config[type]['rankType'][0]
+        rankType = 'rank'
     if rankType not in config[type]['rankType']:
         print("RankType has to be set properly with --rankType.")
         print('Valid RankType:\n\t', config[type]['rankType'])
