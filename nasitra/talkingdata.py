@@ -48,5 +48,10 @@ def talkingdata(args):
                      date=args.date, dateType=args.dateType,
                      outfile=args.outfile, outfolder=args.outfolder)
 
+    if args.type == 'wx':
+        from talkingdata.wx import crawl
+        return crawl(type=args.type, typeId=args.list, date=args.date,
+                     outfile=args.outfile, outfolder=args.outfolder)
+
     print('Type error:', args.type)
     return
