@@ -12,6 +12,7 @@ config = systemconfig.config
 
 
 def crawl(type, categoryId, date, outfile=None, outfolder=None):
+    # 榜单排名说明：以周粒度（周一至周日）进行数据统计，按公众号的总阅读数进行排行。
     d = {
         'year': int(date[0:4]),
         'month': int(date[4:6]),

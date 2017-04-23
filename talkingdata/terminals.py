@@ -11,8 +11,12 @@ from general import config as systemconfig
 config = systemconfig.config
 
 
-def crawl(type, terminalType,  date, platform=None, dateType=None,
-          outfile=None, outfolder=None):
+def crawl(type, terminalType,  date, platform=None, dateType=None, outfile=None, outfolder=None):
+    # 品牌排行说明：品牌：此品牌下活跃设备量/监测活跃设备总量。
+    # "minWeek":"0001-01-10",
+    # "minMonth":"2014-01-01",
+    # "minQ":"2014-01-01"
+
     if terminalType == '1':
         platform = '3'
     else:

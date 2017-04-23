@@ -42,22 +42,22 @@ def talkingdata(args):
         print('Valid List:\n\t', li)
         return
 
-    if args.type == 'apprank':
+    if args.type == 'app':
         if args.list in ('1', '2', '3'):
-            from talkingdata.apprank import trend
+            from talkingdata.app import trend
             return trend(type=args.type, typeId=args.list, appId=args.listname,
                          date=args.date, date2=args.date2, dateType=args.dateType,
                          outfile=args.outfile, outfolder=args.outfolder)
         if args.list == '4':
-            from talkingdata.apprank import profile
+            from talkingdata.app import profile
             return profile(type=args.type, typeId=args.list, appId=args.listname,
                            date=args.date,
                            outfile=args.outfile, outfolder=args.outfolder)
         print(args.type, 'error.')
         return
 
-    if args.type == 'app':
-        from talkingdata.app import crawl
+    if args.type == 'apprank':
+        from talkingdata.apprank import crawl
         return crawl(type=args.type, typeId=args.list, rankType=args.rankType,
                      date=args.date, dateType=args.dateType,
                      outfile=args.outfile, outfolder=args.outfolder)

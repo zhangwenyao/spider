@@ -10,6 +10,8 @@ config = systemconfig.config
 
 
 def crawl(type, date, outfile=None, outfolder=None):
+    # 市场洞察基于大量移动互联网用户数据洞察用户特征，展现市场应用热度
+    # 市场洞察,用户画像,用户行为,行业趋势,TalkingData
     d = {
         'year': int(date[0:4]),
         'month': int(date[4:6]),

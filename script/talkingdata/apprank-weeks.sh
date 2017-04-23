@@ -27,11 +27,11 @@ lists=(0 1 2 3 4 5 6 7 8 9 \
   220 221 222 223 224 225 226 227 228 229)
 for d in ${dates[@]}; do
   for l in ${lists[@]} ; do
-    echo python3 live.py --web talkingdata --type app --list $l --dateType w --rankType a --date $d
-    python3 live.py --web talkingdata --type app --list $l --dateType w --rankType a --date $d
-    #echo python3 live.py --web talkingdata --type app --list $l --dateType w --rankType g --date $d
-    #python3 live.py --web talkingdata --type app --list $l --dateType w --rankType g --date $d
-    #echo python3 live.py --web talkingdata --type app --list $l --dateType w --rankType r --date $d
-    #python3 live.py --web talkingdata --type app --list $l --dateType w --rankType r --date $d
+    echo python3 live.py --web talkingdata --type apprank --list $l --dateType w --rankType a --date $d
+    python3 live.py --web talkingdata --type apprank --list $l --dateType w --rankType a --date $d
+    echo python3 live.py --web talkingdata --type apprank --list $l --dateType w --rankType g --date $d
+    python3 live.py --web talkingdata --type apprank --list $l --dateType w --rankType g --date $d
+    echo python3 live.py --web talkingdata --type apprank --list $l --dateType w --rankType r --date $d
+    python3 live.py --web talkingdata --type apprank --list $l --dateType w --rankType r --date $d
   done
 done

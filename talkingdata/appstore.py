@@ -10,6 +10,9 @@ config = systemconfig.config
 
 
 def crawl(type, typeId, date, rankType=None, outfile=None, outfolder=None):
+    # "minDay":"2016-03-07"
+    # 爬升排名：统计周期内，根据AppStore应用排名环比情况，展示最具爬升能力的应用。
+    # 应用排名：统计周期内，根据AppStore数据，展示应用日平均排名及排名环比情况。
     if not rankType:
         rankType = 'rank'
     if rankType not in config[type]['rankType']:
