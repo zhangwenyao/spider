@@ -25,35 +25,34 @@ def crawl(date=None, list='0', city='0', sex='0', fans='0', outfolder=None,
         os.makedirs(fld)
 
     url = '{}/{}'.format(config['api']['anchor'], url)
-    print('crawl url:', url)
-    html = requests.get(url)
-    soup = BeautifulSoup(html.text, 'lxml')
-    num = str(soup.find('li', {'id': 'Page_End'}))
-    num = re.sub("[\s\S]*p=", '', num)
-    num = re.sub('"[\s\S]*', '', num)
-    num = int(num) if num != 'None' else 0
-    print('Num of pages:', num)
-
     range1 = int(range1)
-    if range1 == 0:
-        fn = os.path.join(fld, '1.txt')
-        print('save as:', fn)
-        with open(fn, 'w') as f:
-            head = soup.find("div", {"id": "table_title"})
-            f.write(anchor_row(head))
-            table = soup.find("div", {"class": "table-body company-list-body"})
-            for row in table.findAll("div", {"class": "table-row ng-scope"}):
-                f.write(anchor_row(row))
-        range1 = 2
-
     range2 = int(range2)
-    if range2 == 0 or range2 > num:
-        range2 = num
+    if range1 <= 1 or range2 <= 0:
+        print('crawl url:', url)
+        html = requests.get(url)
+        soup = BeautifulSoup(html.text, 'lxml')
+        num = str(soup.find('li', {'id': 'Page_End'}))
+        num = re.sub("[\s\S]*p=", '', num)
+        num = re.sub('"[\s\S]*', '', num)
+        num = int(num) if num != 'None' else 0
+        print('Num of pages:', num)
+        if range2 <= 0 or range2 > num:
+            range2 = num
+        if range1 <= 1:
+            fn = os.path.join(fld, '1.txt')
+            print('save as:', fn)
+            with open(fn, 'w') as f:
+                head = soup.find("div", {"id": "table_title"})
+                f.write(anchor_row(head))
+                table = soup.find(
+                    "div", {"class": "table-body company-list-body"})
+                for row in table.findAll("div", {"class": "table-row ng-scope"}):
+                    f.write(anchor_row(row))
+            range1 = 2
     for i in range(range1, range2):
         url2 = '{}/&p={}'.format(url, i)
         fn = os.path.join(fld, str(i) + '.txt')
         anchor_page(url2, fn)
-
     return
 
 

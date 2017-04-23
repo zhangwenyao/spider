@@ -50,7 +50,7 @@ def zhaihehe(args):
                  outfile=args.outfile, outfolder=args.outfolder)
         return
 
-    if args.type in ('anchor'):
+    if args.type == 'anchor':
         if not args.city:
             args.city = '0'
         if args.city not in config['city'].keys() \
