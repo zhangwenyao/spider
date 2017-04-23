@@ -11,7 +11,8 @@ from general import config as systemconfig
 config = systemconfig.config
 
 
-def crawl(type, terminalType, platform, date, dateType, outfile, outfolder):
+def crawl(type, terminalType,  date, platform=None, dateType=None,
+          outfile=None, outfolder=None):
     if terminalType == '1':
         platform = '3'
     else:
@@ -50,8 +51,8 @@ def crawl(type, terminalType, platform, date, dateType, outfile, outfolder):
         d['day'] = 1
     date = '{:0>4d}{:0>2d}{:0>2d}'.format(d['year'], d['month'], d['day'])
 
-    api = '{}/{}?date={:0>4d}-{:0>2d}-{:0>2d}'.format(
-        config['web'], config[type]['api'], d['year'], d['month'], d['day'])
+    api = '{}/{}?date={}-{}-{}'.format(
+        config['web'], config[type]['api'], date[0:4], date[4:6], date[6:8])
     api += '&dateType=' + dateType
     api += '&platform=' + platform
     api += '&terminalType=' + terminalType
@@ -63,9 +64,9 @@ def crawl(type, terminalType, platform, date, dateType, outfile, outfolder):
 
     if not outfolder:
         outfolder = type
-    fld = os.path.join('data', 'talkingdata', outfolder)
+    fld = os.path.join('data', config['args'].web, outfolder)
     if not os.path.exists(fld):
-        os.mkdir(fld)
+        os.makedirs(fld)
     if not outfile:
         outfile = '{}.{}.{}.{}.txt'.format(
             date, terminalType, platform, dateType)

@@ -39,8 +39,8 @@ def zhaihehe(args):
         if args.date2 and len(args.date2) != 8:
             print("Date2 has to be set properly in '20170101' form.")
             return
-        from zhaihehe.spider import crawl
-        crawl(list=args.list, type=args.type, date=args.date,
+        from zhaihehe.lists import crawl
+        crawl(list=args.list, date=args.date, type=args.type,
               date2=args.date2, outfolder=args.outfolder)
         return
 
@@ -72,10 +72,10 @@ def zhaihehe(args):
             print("Fans has to be set properly with --fans.")
             print('Valid Fans:\n\t', config['fans'])
             return
-        from zhaihehe.anchor import anchor
-        return anchor(date=args.date, list=args.list, city=args.city,
-                      sex=args.sex, fans=args.fans, outfolder=args.outfolder,
-                      range1=args.range1, range2=args.range2)
+        from zhaihehe.anchor import crawl
+        return crawl(date=args.date, list=args.list, city=args.city,
+                     sex=args.sex, fans=args.fans, outfolder=args.outfolder,
+                     range1=args.range1, range2=args.range2)
 
     print('Type error:', args.type)
     return

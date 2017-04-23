@@ -59,7 +59,7 @@ def main_parser(argv):
 
 def main_load_config(args):
     with open(args.config, 'r') as f:
-        systemconfig.config = json.load(f)
+        systemconfig.config.update(json.load(f))
     return
 
 
@@ -67,6 +67,7 @@ def main(argv=sys.argv[1:]):
     args = main_parser(argv)
     if args is None:
         return
+    systemconfig.config = {"args":  args}
 
     web = ('z', 'zhaihehe', 't', 'talkingdata')
     if args.web not in web:
@@ -75,6 +76,7 @@ def main(argv=sys.argv[1:]):
         return
 
     if args.web in ('z', 'zhaihehe'):
+        args.web = 'zhaihehe'
         if not args.config:
             args.config = 'config/zhaihehe.json'
         main_load_config(args)
@@ -82,6 +84,7 @@ def main(argv=sys.argv[1:]):
         return zhaihehe(args)
 
     if args.web in ('t', 'talkingdata'):
+        args.web = 'talkingdata'
         if not args.config:
             args.config = 'config/talkingdata.json'
         main_load_config(args)

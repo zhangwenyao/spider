@@ -11,7 +11,14 @@ from general import config as systemconfig
 config = systemconfig.config
 
 
-def crawl(type, typeId, rankType, date, dateType, outfile, outfolder):
+def crawl(type, typeId, date, rankType=None, dateType=None, outfile=None, outfolder=None):
+    # "minWeek":"2015-01-05"
+    # "maxWeek":"2017-04-10"
+    # "minMonth":"2015-03-01"
+    # "maxMonth":"2017-03-01"
+    # "minQ":"2016-01-01"
+    # "maxQ":"2016-10-01"
+
     if not rankType:
         rankType = 'a'
     if rankType not in config[type]['rankType']:
@@ -42,13 +49,13 @@ def crawl(type, typeId, rankType, date, dateType, outfile, outfolder):
             }
     elif dateType == 'm':
         d['day'] = 1
-    elif dateType in ('q'):
+    elif dateType == 'q':
         d['month'] = (d['month'] - 1) // 3 * 3 + 1
         d['day'] = 1
     date = '{:0>4d}{:0>2d}{:0>2d}'.format(d['year'], d['month'], d['day'])
 
-    api = '{}/{}?date={:0>4d}-{:0>2d}-{:0>2d}'.format(
-        config['web'], config[type]['api'], d['year'], d['month'], d['day'])
+    api = '{}/{}?date={}-{}-{}'.format(
+        config['web'], config[type]['api'], date[0:4], date[4:6], date[6:8])
     if int(typeId) > 0:
         api += '&typeId=' + typeId
     api += '&rankType=' + rankType
@@ -61,9 +68,9 @@ def crawl(type, typeId, rankType, date, dateType, outfile, outfolder):
 
     if not outfolder:
         outfolder = type
-    fld = os.path.join('data', 'talkingdata', outfolder)
+    fld = os.path.join('data', config['args'].web, outfolder)
     if not os.path.exists(fld):
-        os.mkdir(fld)
+        os.makedirs(fld)
     if not outfile:
         outfile = '{}.{}.{}.{}.txt'.format(
             date, typeId, rankType, dateType)
@@ -81,3 +88,20 @@ def crawl(type, typeId, rankType, date, dateType, outfile, outfolder):
                     [str(d[k]) if k in d else '' for k in head]) + '\n')
 
     return
+
+
+def trend_ranking():
+    pass
+
+
+def trend_coverageRate():
+    pass
+
+
+def trend_activeRate():
+    pass
+
+
+def profile():
+    # minMonth: 20160101
+    pass

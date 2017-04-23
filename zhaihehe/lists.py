@@ -14,7 +14,7 @@ from general import config as systemconfig
 config = systemconfig.config
 
 
-def crawl(list, type, date, date2=None, outfolder=None):
+def crawl(list, date, type='d', date2=None, outfolder=None):
     d = {
         'year': int(date[0:4]),
         'month': int(date[4:6]),
@@ -24,12 +24,12 @@ def crawl(list, type, date, date2=None, outfolder=None):
         (d['year'], d['month'], d['day'], -8, 0, 0, 0, 0, 0)))
 
     if type in ('d', 'day'):
-        url = '{}/{}/{:0>4d}-{:0>2d}-{:0>2d}'.format(config['api']['day'], list,
-                                                     d['year'], d['month'], d['day'])
+        url = '{}/{}/{}-{}-{}'.format(config['api']['day'], list,
+                                      date[0:4], date[4:6], date[6:8])
         if not outfolder:
             outfolder = 'day'
-        fld = 'data/{}/{}'.format(list, outfolder)
-        filename = '{}/{}.csv'.format(fld, date)
+        fld = os.path.join('data', config['args'].web, list, outfolder)
+        filename = os.path.join(fld, str(date) + '.csv')
 
     elif type in ('w', 'week'):
         d1 = datetime.date(d['year'], d['month'], d['day'])
@@ -43,33 +43,30 @@ def crawl(list, type, date, date2=None, outfolder=None):
             }
             d['time'] = calendar.timegm(time.struct_time(
                 (d['year'], d['month'], d['day'], -8, 0, 0, 0, 0, 0)))
-        time2 = d['time'] + 3600 * 24 * 6
         date2 = (d1 + datetime.timedelta(days=6)).strftime("%Y%m%d")
+        d2_time = d['time'] + 3600 * 24 * 6
         url = '{}/{}/{}-{}'.format(config['api']['week'], list,
-                                   d['time'], time2)
+                                   d['time'], d2_time)
         if not outfolder:
             outfolder = 'week'
-        fld = 'data/{}/{}'.format(list, outfolder)
-        filename = '{}/{}-{}.csv'.format(fld, date, date2)
+        fld = os.path.join('data', config['args'].web, list, outfolder)
+        filename = os.path.join(fld, '{}-{}.csv'.format(date, date2))
 
     elif type in ('m', 'month'):
+        date[6:8] = '01'
         d['day'] = 1
         d['time'] = calendar.timegm(time.struct_time(
             (d['year'], d['month'], d['day'], -8, 0, 0, 0, 0, 0)))
-        d2 = {
-            'year': d['year'],
-            'month': d['month'],
-            'day': calendar.monthrange(d['year'], d['month'])[1]
-        }
-        d2['time'] = d['time'] + 3600 * 24 * int(d2['day']) - 1
+        d2_day = calendar.monthrange(d['year'], d['month'])[1]
+        d2_time = d['time'] + 3600 * 24 * d2_day - 1
+        date2 = date
+        date2[6:8] = '%2d' % d2_day
         url = '{}/{}/{}-{}'.format(config['api']['month'], list,
-                                   d['time'], d2['time'])
+                                   d['time'], d2_time)
         if not outfolder:
             outfolder = 'month'
-        fld = 'data/{}/{}'.format(list, outfolder)
-        filename = '{}/{:0>4d}{:0>2d}{:0>2d}-{:0>4d}{:0>2d}{:0>2d}.csv'.format(
-            fld, d['year'], d['month'], d['day'],
-            d2['year'], d2['month'], d2['day'])
+        fld = os.path.join('data', config['args'].web, list, outfolder)
+        filename = os.path.join(fld, '{}-{}.csv'.format(date, date2))
 
     elif type in ('o', 'other'):
         if not date2:
@@ -86,15 +83,15 @@ def crawl(list, type, date, date2=None, outfolder=None):
                                    d['time'], d2['time'])
         if not outfolder:
             outfolder = 'other'
-        fld = 'data/{}/{}'.format(list, outfolder)
-        filename = '{}/{}-{}.csv'.format(fld, date, date2)
+        fld = os.path.join('data', config['args'].web, list, outfolder)
+        filename = os.path.join(fld, '{}-{}.csv'.format(date, date2))
 
     else:
         print('type error: {}'.format(type))
         return None
 
     if not os.path.exists(fld):
-        os.mkdir(fld)
+        os.makedirs(fld)
 
     print('crawl url: ', url)
     html = requests.get(url)

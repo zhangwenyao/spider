@@ -11,7 +11,7 @@ from general import config as systemconfig
 config = systemconfig.config
 
 
-def crawl(type, typeId, date, outfile, outfolder):
+def crawl(type, categoryId, date, outfile=None, outfolder=None):
     d = {
         'year': int(date[0:4]),
         'month': int(date[4:6]),
@@ -28,8 +28,8 @@ def crawl(type, typeId, date, outfile, outfolder):
         }
 
     api = '{}/{}'.format(config['web'], config[type]['api'])
-    if int(typeId) > 0:
-        api += '?typeId=' + typeId
+    if int(categoryId) > 0:
+        api += '?categoryId=' + categoryId
     print(type, 'crawl:', api)
     data = requests.get(api).text
     if not data or len(data) < 4:
@@ -38,11 +38,11 @@ def crawl(type, typeId, date, outfile, outfolder):
 
     if not outfolder:
         outfolder = type
-    fld = os.path.join('data', 'talkingdata', outfolder)
+    fld = os.path.join('data', config['args'].web, outfolder, date)
     if not os.path.exists(fld):
-        os.mkdir(fld)
+        os.makedirs(fld)
     if not outfile:
-        outfile = '{}.{}.txt'.format(date, typeId)
+        outfile = '{}.{}.txt'.format(date, categoryId)
     filename = os.path.join(fld, outfile)
     print('save as:', filename)
     with open(filename, 'w') as f:

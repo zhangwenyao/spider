@@ -9,7 +9,7 @@ from general import config as systemconfig
 config = systemconfig.config
 
 
-def crawl(type, typeId, rankType, date, outfile, outfolder):
+def crawl(type, typeId, date, rankType=None, outfile=None, outfolder=None):
     if not rankType:
         rankType = 'rank'
     if rankType not in config[type]['rankType']:
@@ -17,15 +17,9 @@ def crawl(type, typeId, rankType, date, outfile, outfolder):
         print('Valid RankType:\n\t', config[type]['rankType'])
         return
 
-    d = {
-        'year': int(date[0:4]),
-        'month': int(date[4:6]),
-        'day': int(date[6:8])
-    }
-
-    api = '{}/{}/{}.json?cat={}&date={:0>4d}-{:0>2d}-{:0>2d}&tab=1'.format(
+    api = '{}/{}/{}.json?cat={}&date={}-{}-{}&tab=1'.format(
         config['web'], config[type]['api'], rankType, typeId,
-        d['year'], d['month'], d['day'])
+        date[0:4], date[4:6], date[6:8])
     print(type, 'crawl:', api)
     data = json.loads(requests.get(api).text)['rows']
     if not data:
@@ -34,9 +28,9 @@ def crawl(type, typeId, rankType, date, outfile, outfolder):
 
     if not outfolder:
         outfolder = type
-    fld = os.path.join('data', 'talkingdata', outfolder)
+    fld = os.path.join('data', config['args'].web, outfolder)
     if not os.path.exists(fld):
-        os.mkdir(fld)
+        os.makedirs(fld)
     if not outfile:
         outfile = '{}.{}.{}.txt'.format(date, typeId, rankType)
     filename = os.path.join(fld, outfile)

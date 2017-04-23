@@ -6,23 +6,25 @@ import os
 import re
 import requests
 from bs4 import BeautifulSoup
-from general import config as sc
+from general import config as systemconfig
+
+config = systemconfig.config
 
 
-def anchor(date=None, list='0', city='0', sex='0', fans='0', outfolder=None,
-           range1='0', range2='0'):
-    if not outfolder:
-        outfolder = 'anchor'
-    fld = 'data/{}/{}'.format(list, outfolder)
-    if not os.path.exists(fld):
-        os.mkdir(fld)
+def crawl(date=None, list='0', city='0', sex='0', fans='0', outfolder=None,
+          range1='0', range2='0'):
     filename = date if date else (
         datetime.datetime.today() - datetime.timedelta(days=1)).strftime("%Y-%m-%d")
     url = '{}_{}_{}_{}'.format(list, city, sex, fans)
     if list or city or sex or fans:
         filename += '.' + url
+    if not outfolder:
+        outfolder = 'anchor'
+    fld = os.path.join('data', config['args'].web, list, outfolder, filename)
+    if not os.path.exists(fld):
+        os.makedirs(fld)
 
-    url = '{}/{}'.format(sc.config['api']['anchor'], url)
+    url = '{}/{}'.format(config['api']['anchor'], url)
     print('crawl url:', url)
     html = requests.get(url)
     soup = BeautifulSoup(html.text, 'lxml')
@@ -34,7 +36,7 @@ def anchor(date=None, list='0', city='0', sex='0', fans='0', outfolder=None,
 
     range1 = int(range1)
     if range1 == 0:
-        fn = '{}/{}.1.txt'.format(fld, filename)
+        fn = os.path.join(fld, '1.txt')
         print('save as:', fn)
         with open(fn, 'w') as f:
             head = soup.find("div", {"id": "table_title"})
@@ -49,7 +51,7 @@ def anchor(date=None, list='0', city='0', sex='0', fans='0', outfolder=None,
         range2 = num
     for i in range(range1, range2):
         url2 = '{}/&p={}'.format(url, i)
-        fn = '{}/{}.{}.txt'.format(fld, filename, i)
+        fn = os.path.join(fld, str(i) + '.txt')
         anchor_page(url2, fn)
 
     return
