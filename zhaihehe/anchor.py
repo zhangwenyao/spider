@@ -54,7 +54,7 @@ def crawl(date=None, list='0', city='0', sex='0', fans='0', outfolder=None,
                 for row in table.findAll("div", {"class": "table-row ng-scope"}):
                     f.write(anchor_row(row))
             range1 = 2
-    for i in range(range1, range2):
+    for i in range(range1, range2 + 1):
         url2 = '{}/&p={}'.format(url, i)
         fn = os.path.join(fld, str(i) + '.txt')
         try:
@@ -88,7 +88,7 @@ def anchor_row(t):
 
 
 def anchor_page(url, fn):
-    print('craul url:', url)
+    print('crawl url:', url)
     html = requests.get(url)
     soup = BeautifulSoup(html.text, 'lxml')
     print('save as:', fn)

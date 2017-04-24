@@ -85,8 +85,10 @@ def trend(type, typeId, appId, date, date2=None, dateType=None, outfile=None, ou
         head = [i['name'] for i in data]
         head.sort()
         f.write('\t'.join(head) + '\n')
-        data = [i['value'] for i in data]
-        data = list(zip(*data))
+        data2={}
+        for i in data:
+            data2[i['name']] = i['value']
+        data = list(zip(*[data2[i] for i in head]))
         for i in data:
             f.write('\t'.join([str(k) for k in i]) + '\n')
 

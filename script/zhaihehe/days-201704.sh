@@ -8,7 +8,8 @@ dates=(20170420 20170421 20170422 20170423)
 lists=(0 4 5 6 7 8 9 10 11 12 13)
 for d in ${dates[@]}; do
   for l in ${lists[@]} ; do
+    while [ `ps -ef | grep "python3 live.py" | grep -v grep | wc -l` -gt 12 ] ; do sleep 1 ; done
     echo python3 live.py --list $l --type day --date $d
-    python3 live.py --list $l --type day --date $d
+    python3 live.py --list $l --type day --date $d &
   done
 done

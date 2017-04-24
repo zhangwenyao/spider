@@ -7,7 +7,8 @@ fi
 
 lists=(0 4 5 6 7 8 9 10 11 12 13)
 for l in ${lists[@]} ; do
-  echo python3 live.py --list $l $@
-  python3 live.py --list $l $@
+  while [ `ps -ef | grep "python3 live.py" | grep -v grep | wc -l` -gt 12 ] ; do sleep 1 ; done
+  echo python3 live.py --list $l $@ &
+  python3 live.py --list $l $@ &
 done
 
