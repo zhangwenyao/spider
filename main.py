@@ -69,7 +69,7 @@ def main(argv=sys.argv[1:]):
         return
     systemconfig.config = {"args":  args}
 
-    web = ('z', 'zhaihehe', 't', 'talkingdata')
+    web = ('z', 'zhaihehe', 't', 'talkingdata', 'b', 'baidu')
     if args.web not in web:
         print("Web has to be set properly with -w/--web.")
         print('Web List:\n\t', web)
@@ -90,6 +90,14 @@ def main(argv=sys.argv[1:]):
         main_load_config(args)
         from nasitra.talkingdata import talkingdata
         return talkingdata(args)
+
+    if args.web in ('baiduMOTA'):
+        args.web = 'baiduMOTA'
+        if not args.config:
+            args.config = 'config/baiduMOTA.json'
+        main_load_config(args)
+        from nasitra.baiduMOTA import baiduMOTA
+        return baiduMOTA(args)
 
 
 if __name__ == "__main__":
