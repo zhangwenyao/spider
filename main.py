@@ -9,7 +9,7 @@ from general import config as systemconfig
 
 def main_parser(argv):
     parser = argparse.ArgumentParser(
-        prog='py live.py', description='crawl live data of zhaihehe.com')
+        prog='py main.py', description='crawl data from webs.')
     parser.add_argument('-v', '--version', action='version',
                         version='%(prog)s 2.0')
     parser.add_argument('-w', '--web', nargs='?', default='zhaihehe',
@@ -69,7 +69,7 @@ def main(argv=sys.argv[1:]):
         return
     systemconfig.config = {"args":  args}
 
-    web = ('z', 'zhaihehe', 't', 'talkingdata', 'b', 'baidu')
+    web = ('z', 'zhaihehe', 't', 'talkingdata', 'b', 'baidu', 'm', 'momo')
     if args.web not in web:
         print("Web has to be set properly with -w/--web.")
         print('Web List:\n\t', web)
@@ -91,13 +91,21 @@ def main(argv=sys.argv[1:]):
         from nasitra.talkingdata import talkingdata
         return talkingdata(args)
 
-    if args.web in ('baiduMOTA'):
+    if args.web in ('b', 'baiduMOTA'):
         args.web = 'baiduMOTA'
         if not args.config:
             args.config = 'config/baiduMOTA.json'
         main_load_config(args)
         from nasitra.baiduMOTA import baiduMOTA
         return baiduMOTA(args)
+
+    if args.web in ('m', 'momo'):
+        args.web = 'momo'
+        if not args.config:
+            args.config = 'config/momo.json'
+        main_load_config(args)
+        from nasitra.momo import momo
+        return momo(args)
 
 
 if __name__ == "__main__":

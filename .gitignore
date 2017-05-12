@@ -2,5 +2,7 @@
 *.pyc
 *.swp
 config
-test
+infiles
 data
+logs
+test
