@@ -98,17 +98,12 @@ def crawl(list, date, type='d', date2=None, outfolder=None):
     html = requests.get(url)
     soup = BeautifulSoup(html.text, 'lxml')
 
-    print('save as: ', filename)
-    f = open(filename, 'w')
-    csv_writer = csv.writer(f)
     td_th = re.compile('t[dh]')
-
     table = soup.find("table", {"id": "table_header"})
-    for row in table.findAll("tr"):
-        cells = row.findAll(td_th)
-        csv_writer.writerow([cell.find(text=True).strip() for cell in cells])
+    cells = table.find("tr").findAll(td_th)
+    header = [cell.find(text=True).strip() for cell in cells]
+    datas = []
     table = soup.find("table", {"id": "table_list"})
-
     for row in table.findAll("tr"):
         cells = row.findAll(td_th)
         t = cells[1].findAll("h4")[1].find(text=True)
@@ -116,7 +111,15 @@ def crawl(list, date, type='d', date2=None, outfolder=None):
         for cell in cells[2:]:
             t = cell.find(text=True)
             w_row.append(t.strip() if t else '')
-        csv_writer.writerow(w_row)
-    f.close()
+        datas.append(w_row)
+    if len(datas) > 0:
+        print('save as: ', filename)
+        with open(filename, 'w') as f:
+            csv_writer = csv.writer(f)
+            csv_writer.writerow(header)
+            for i in datas:
+                csv_writer.writerow(i)
+    else:
+        print('data is empty:', url, filename)
 
     return None
