@@ -1,6 +1,7 @@
 #!/bin/bash
 
-dates=(20160101 20160401 20160701 20161001)
+#dates=(20160101 20160401 20160701 20161001)
+dates=(20170101)
 lists=(0 1 2 3 4 5 6 7 8 9 \
   10 11 12 13 15 16 17 18 19 \
   20 21 22 23 24 25 26 27 28 29 \
@@ -22,12 +23,12 @@ lists=(0 1 2 3 4 5 6 7 8 9 \
   220 221 222 223 224 225 226 227 228 229)
 for d in ${dates[@]}; do
   for l in ${lists[@]} ; do
-    while [ `ps -ef | grep "python3 live.py" | grep -v grep | wc -l` -gt 12 ] ; do sleep 1 ; done
-    echo python3 live.py --web talkingdata --type apprank --list $l --dateType q --rankType a --date $d
-    python3 live.py --web talkingdata --type apprank --list $l --dateType q --rankType a --date $d &
-    echo python3 live.py --web talkingdata --type apprank --list $l --dateType q --rankType g --date $d
-    python3 live.py --web talkingdata --type apprank --list $l --dateType q --rankType g --date $d &
-    echo python3 live.py --web talkingdata --type apprank --list $l --dateType q --rankType r --date $d
-    python3 live.py --web talkingdata --type apprank --list $l --dateType q --rankType r --date $d &
+    while [ `ps -ef | grep "python3 main.py" | grep -v grep | wc -l` -gt 12 ] ; do sleep 1 ; done
+    echo python3 main.py --web talkingdata --type apprank --list $l --dateType q --rankType a --date $d
+    python3 main.py --web talkingdata --type apprank --list $l --dateType q --rankType a --date $d &
+    echo python3 main.py --web talkingdata --type apprank --list $l --dateType q --rankType g --date $d
+    python3 main.py --web talkingdata --type apprank --list $l --dateType q --rankType g --date $d &
+    echo python3 main.py --web talkingdata --type apprank --list $l --dateType q --rankType r --date $d
+    python3 main.py --web talkingdata --type apprank --list $l --dateType q --rankType r --date $d &
   done
 done

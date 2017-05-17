@@ -44,25 +44,26 @@ def crawl(list, date, type='d', date2=None, outfolder=None):
             d['time'] = calendar.timegm(time.struct_time(
                 (d['year'], d['month'], d['day'], -8, 0, 0, 0, 0, 0)))
         date2 = (d1 + datetime.timedelta(days=6)).strftime("%Y%m%d")
-        d2_time = d['time'] + 3600 * 24 * 6
+        d_2_time = d['time'] + 3600 * 24 * 6
         url = '{}/{}/{}-{}'.format(config['api']['week'], list,
-                                   d['time'], d2_time)
+                                   d['time'], d_2_time)
         if not outfolder:
             outfolder = 'week'
         fld = os.path.join('data', config['args'].web, list, outfolder)
         filename = os.path.join(fld, '{}-{}.csv'.format(date, date2))
 
     elif type in ('m', 'month'):
-        date[6:8] = '01'
         d['day'] = 1
+        d1 = datetime.date(d['year'], d['month'], d['day'])
+        date = d1.strftime("%Y%m%d")
         d['time'] = calendar.timegm(time.struct_time(
             (d['year'], d['month'], d['day'], -8, 0, 0, 0, 0, 0)))
-        d2_day = calendar.monthrange(d['year'], d['month'])[1]
-        d2_time = d['time'] + 3600 * 24 * d2_day - 1
-        date2 = date
-        date2[6:8] = '%2d' % d2_day
+        d_2_day = calendar.monthrange(d['year'], d['month'])[1]
+        d_2_time = d['time'] + 3600 * 24 * d_2_day - 1
+        d2 = datetime.date(d['year'], d['month'], d_2_day)
+        date2 = d2.strftime("%Y%m%d")
         url = '{}/{}/{}-{}'.format(config['api']['month'], list,
-                                   d['time'], d2_time)
+                                   d['time'], d_2_time)
         if not outfolder:
             outfolder = 'month'
         fld = os.path.join('data', config['args'].web, list, outfolder)
@@ -72,15 +73,15 @@ def crawl(list, date, type='d', date2=None, outfolder=None):
         if not date2:
             print('error: need date2.')
             return None
-        d2 = {
+        d_2 = {
             'year': int(date2[0:4]),
             'month': int(date2[4:6]),
             'day': int(date2[6:8])
         }
-        d2['time'] = calendar.timegm(time.struct_time(
-            (d2['year'], d2['month'], d2['day'], 24 - 8, 0, 0, 0, 0, 0))) - 1
+        d_2['time'] = calendar.timegm(time.struct_time(
+            (d_2['year'], d_2['month'], d_2['day'], 24 - 8, 0, 0, 0, 0, 0))) - 1
         url = '{}/{}/{}-{}'.format(config['api']['month'], list,
-                                   d['time'], d2['time'])
+                                   d['time'], d_2['time'])
         if not outfolder:
             outfolder = 'other'
         fld = os.path.join('data', config['args'].web, list, outfolder)

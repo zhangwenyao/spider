@@ -27,7 +27,7 @@ def web(id, outfolder=None):
         driver.quit()
 
 
-def web2(infile, outfolder=None):
+def web2(infile, loop=1, outfolder=None):
     if not outfolder:
         outfolder = 'star'
     fld = os.path.join('data', config['args'].web, outfolder)
@@ -40,10 +40,16 @@ def web2(infile, outfolder=None):
 
     driver = webdriver.Chrome()
     try:
-        for id in ids:
-            star, exact_time = get_star(driver, id)
-            filename = os.path.join(fld, '{}.txt'.format(id))
-            save(filename, exact_time, star)
+        if not loop:
+            loop = 1
+        loop = int(loop)
+        if loop < 1:
+            loop = 1
+        for _ in range(loop):
+            for id in ids:
+                star, exact_time = get_star(driver, id)
+                filename = os.path.join(fld, '{}.txt'.format(id))
+                save(filename, exact_time, star)
     finally:
         driver.close()
         driver.quit()
@@ -51,11 +57,11 @@ def web2(infile, outfolder=None):
 
 def get_star(driver, id, time_out=15):
     url = '{}/{}'.format(config['html']['url'], id)
-    print('crawl url: ', url)
+    print('crawl url:', url)
     star = '0'
+    t = 0
     try:
         driver.get(url)
-        t = 0
         while t < time_out:
             try:
                 elem = driver.find_element_by_xpath(
@@ -68,14 +74,14 @@ def get_star(driver, id, time_out=15):
             time.sleep(0.1)
             t += 0.1
             t = round(t, 1)
-        if t >= time_out:
-            print('time_out')
-        else:
-            print('time used:', t)
     except:
         pass
     exact_time = (datetime.datetime.utcnow() +
                   datetime.timedelta(hours=8)).strftime("%Y%m%d-%H%M%S")
+    if int(star) <= 0 and t >= time_out:
+        print('time_out')
+    else:
+        print('time waited:', t)
     print(exact_time, star)
     return int(star), exact_time
 

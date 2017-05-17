@@ -37,5 +37,5 @@ def momo(args):
             return
 
         from momo.web import web2
-        web2(infile=args.infile, outfolder=args.outfolder)
+        web2(infile=args.infile, loop=args.list, outfolder=args.outfolder)
         return
