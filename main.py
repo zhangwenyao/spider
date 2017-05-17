@@ -48,6 +48,10 @@ def main_parser(argv):
                         help="specify the range1 which will be operated on.")
     parser.add_argument('--range2', nargs='?',
                         help="specify the range2 which will be operated on.")
+    parser.add_argument('--onlyprint', action='store_true',
+                        help="only print information without execute it.")
+    parser.add_argument('--force', action='store_true',
+                        help="force to run the action.")
     parser.add_argument('params', nargs='*',
                         help='Different from action to action.')
 

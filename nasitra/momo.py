@@ -28,7 +28,7 @@ def momo(args):
 
     if args.type == 'web':
         from momo.web import web
-        web(id=args.list, type=args.type, outfolder=args.outfolder)
+        web(id=args.list, outfolder=args.outfolder, onlyprint=args.onlyprint)
         return
 
     if args.type == 'web2':
@@ -37,5 +37,6 @@ def momo(args):
             return
 
         from momo.web import web2
-        web2(infile=args.infile, loop=args.list, outfolder=args.outfolder)
+        web2(infile=args.infile, loop=args.list,
+             outfolder=args.outfolder, onlyprint=args.onlyprint)
         return
