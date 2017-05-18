@@ -36,7 +36,7 @@ def main():
                     ti = time
         if t:
             star.append('\t'.join([t, str(n)]))
-        filename = 'data/momo/star-count/' + id + '.txt'
+        filename = 'data/momo/star-time/' + id + '.txt'
         print('save file:', filename)
         with open(filename, 'w') as f:
             f.write('\n'.join(star))

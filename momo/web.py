@@ -67,8 +67,8 @@ def get_star(driver, id, time_out=15):
     try:
         driver.get(url)
         while t < time_out:
-            if url != driver.current_url:
-                break
+            # if url != driver.current_url:
+                # break
             try:
                 elem = driver.find_element_by_xpath(
                     '//strong[@class="starNum star"]')
@@ -87,16 +87,14 @@ def get_star(driver, id, time_out=15):
     print(exact_time, star)
     if url != driver.current_url:
         print('ERROR: user', id, 'does not exist. New url:', driver.current_url)
-        star = '0'
+    if star == '0' and t >= time_out:
+        print('time_out')
     else:
-        if star == '0' and t >= time_out:
-            print('time_out')
-        else:
-            print('time waited:', t)
-            star.replace(',', '')
-            star.replace(' ', '')
-            star.replace('万', '0000')
-            star.replace('亿', '00000000')
+        print('time waited:', t)
+        star.replace(',', '')
+        star.replace(' ', '')
+        star.replace('万', '0000')
+        star.replace('亿', '00000000')
     return int(star), exact_time
 
 
