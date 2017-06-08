@@ -8,9 +8,9 @@ script/zhaihehe/week.sh
 
 
 # talkingdata
-script/talkingdata/app-day.sh
-script/talkingdata/app-month.sh
-script/talkingdata/app-quarter.sh
+script/talkingdata/app-day-2017.sh
+script/talkingdata/app-month-2017.sh
+script/talkingdata/app-quarter-2017.sh
 script/talkingdata/app-week.sh
 script/talkingdata/app-profile.sh
 script/talkingdata/apprank-month.sh

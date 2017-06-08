@@ -4,6 +4,7 @@
 import os
 import time
 import datetime
+import logging
 from selenium import webdriver
 from general import config as systemconfig
 
@@ -46,9 +47,10 @@ def web2(infile, loop=1, outfolder=None, onlyprint=False):
         if not loop:
             loop = 1
         loop = int(loop)
-        if loop < 1:
-            loop = 1
-        for _ in range(loop):
+        l = 0
+        while loop <= 0 or l < loop:
+            if l < loop:
+                l += 1
             for id in ids:
                 star, exact_time = get_star(driver, id)
                 if not onlyprint:
@@ -59,13 +61,14 @@ def web2(infile, loop=1, outfolder=None, onlyprint=False):
         driver.quit()
 
 
-def get_star(driver, id, time_out=15):
+def get_star(driver, id, time_out=20):
     url = '{}/{}'.format(config['html']['url'], id)
-    print('crawl url:', url)
+    logging.info('crawl url: {}'.format(url))
     star = '0'
     t = 0
     try:
         driver.get(url)
+        flag = True
         while t < time_out:
             # if url != driver.current_url:
                 # break
@@ -73,9 +76,12 @@ def get_star(driver, id, time_out=15):
                 elem = driver.find_element_by_xpath(
                     '//strong[@class="starNum star"]')
                 star = elem.text
-                if star and star != '0':
+                if int(star) > 0:
                     break
             except:
+                if flag and star and star != '0':
+                    time_out += 60
+                    flag = False
                 pass
             time.sleep(0.1)
             t += 0.1
@@ -84,21 +90,23 @@ def get_star(driver, id, time_out=15):
         pass
     exact_time = (datetime.datetime.utcnow() +
                   datetime.timedelta(hours=8)).strftime("%Y%m%d-%H%M%S")
-    print(exact_time, star)
-    if url != driver.current_url:
-        print('ERROR: user', id, 'does not exist. New url:', driver.current_url)
+    logging.info('{}\t{}'.format(exact_time,  star))
+    try:
+        if url != driver.current_url:
+            logging.info('ERROR: user {} does not exist. New url: {}'.format(
+                id, driver.current_url))
+            while url != driver.current_url:
+                time.sleep(5)
+    except:
+        pass
     if star == '0' and t >= time_out:
-        print('time_out')
+        logging.info('time_out: {}'.format(t))
     else:
-        print('time waited:', t)
-        star.replace(',', '')
-        star.replace(' ', '')
-        star.replace('万', '0000')
-        star.replace('亿', '00000000')
-    return int(star), exact_time
+        logging.info('time waited: {}'.format(t))
+    return star, exact_time
 
 
 def save(filename, exact_time, star):
-    print('save into file:', filename)
+    logging.info('save into file: {}'.format(filename))
     with open(filename, 'a') as f:
         f.write('{}\t{}\n'.format(exact_time, star))

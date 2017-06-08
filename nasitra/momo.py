@@ -40,3 +40,13 @@ def momo(args):
         web2(infile=args.infile, loop=args.list,
              outfolder=args.outfolder, onlyprint=args.onlyprint)
         return
+
+    if args.type == 'rank':
+        if not args.rankType:
+            args.rankType = 'star_day'
+        if args.rankType not in config['rank']['rankType']:
+            print("Infile has to be set properly with -i/--infile.")
+            print('RankType List:\n\t', config['rank']['rankType'])
+        from momo.rank import rank
+        rank(rankType=args.rankType, outfolder=args.outfolder)
+        return

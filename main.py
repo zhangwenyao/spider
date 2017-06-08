@@ -61,9 +61,18 @@ def main_parser(argv):
     return parser.parse_args(argv)
 
 
+import os
+import logging
+import logging.config
+
+
 def main_load_config(args):
     with open(args.config, 'r') as f:
         systemconfig.config.update(json.load(f))
+    log = systemconfig.config['logconfig']
+    log['handlers']['file']['filename'] = os.path.join(
+        systemconfig.config['folders']['logdir'], log['handlers']['file']['filename'])
+    logging.config.dictConfig(log)
     return
 
 

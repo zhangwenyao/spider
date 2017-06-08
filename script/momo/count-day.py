@@ -31,16 +31,33 @@ def main(argv=sys.argv[1:]):
             for i in f:
                 data = i.split()
                 time = datetime.strptime(data[0], '%Y%m%d-%H%M%S')
-                s = int(data[1])
+                s = data[1]
+                if s.find('万') >= 0 or s.find('亿') >= 0:
+                    if s.find('万') >= 0:
+                        s = s.replace('万', '0000')
+                        s = int(s)
+                        if n - 10000 < s <= n - n % 10000:
+                            s = n
+                    elif s.find('亿') >= 0:
+                        s = s.replace('亿', '00000000')
+                        s = int(s)
+                        if n - 100000000 < s <= n - n % 100000000:
+                            s = n
+                s = int(s)
                 if time < ti:
-                    print('skip data:', data)
+                    # print('skip data:', data)
                     continue
+                if time >= ti2:
+                    break
                 if s <= 0:
                     if n <= 0 and d == data[0][0:8]:
                         ti = time
                     continue
                 # renewing
                 if data[0][0:8] != d or s < n or time >= ti + timedelta(hours=6):
+                    if s >= n and ti + timedelta(hours=3) <= time:
+                        print('  long interval:', data,
+                              datetime.strftime(ti, '%Y%m%d-%H%M%S'), n)
                     dayStar += n
                     if data[0][0:8] != d:
                         star.append('\t'.join([d, str(dayStar)]))
@@ -59,7 +76,7 @@ def main(argv=sys.argv[1:]):
                 d = data[0][0:8]
                 ti = time
         dayStar += n
-        while d != date2 and ti <= ti2:
+        while d != date2 and ti < ti2:
             star.append('\t'.join([d, str(dayStar)]))
             dayStar = 0
             d = datetime.strftime(ti + timedelta(days=1), '%Y%m%d')

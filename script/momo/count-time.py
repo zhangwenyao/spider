@@ -1,7 +1,8 @@
+import sys
 from datetime import datetime, timedelta
 
 
-def main():
+def main(argv=sys.argv[1:]):
     infile = "infiles/momo-ids.txt"
     with open(infile, 'r') as f:
         ids = f.read().split()
@@ -17,21 +18,33 @@ def main():
             for i in f:
                 data = i.split()
                 time = datetime.strptime(data[0], '%Y%m%d-%H%M%S')
-                d = int(data[1])
+                s = data[1]
+                if s.find('万') >= 0 or s.find('亿') >= 0:
+                    if s.find('万') >= 0:
+                        s = s.replace('万', '0000')
+                        s = int(s)
+                        if n - 10000 < s <= n - n % 10000:
+                            print(data, t, n)
+                            s = n
+                    elif s.find('亿') >= 0:
+                        s = s.replace('亿', '00000000')
+                        s = int(s)
+                        if n - 100000000 < s <= n - n % 100000000:
+                            print(data, t, n)
+                            s = n
+                s = int(s)
                 if n <= 0:
-                    n = d
+                    n = s
                     t = data[0]
                     ti = time
-                    if d <= 0:
+                    if s <= 0:
                         continue
-                if d > 0:
-                    if d < n or time >= ti + timedelta(hours=6):
+                if s > 0:
+                    if s < n or time >= ti + timedelta(hours=6):
                         star.append('\t'.join([t, str(n)]))
-                        if d >= n \
-                           and ti + timedelta(hours=3) <= time \
-                           <= ti + timedelta(hours=6):
-                            print(t, data[0])
-                    n = d
+                        if s >= n and ti + timedelta(hours=3) <= time:
+                            print('long interval:', data, t, n)
+                    n = s
                     t = data[0]
                     ti = time
         if t:
