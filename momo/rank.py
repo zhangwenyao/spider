@@ -21,17 +21,17 @@ def rank(rankType, outfolder=None):
     t = datetime.utcnow() + timedelta(hours=8)
     if rankType == 'star_potential':
         t = datetime.utcnow() + timedelta(hours=8)
-        dt = t.minute if t.minute < 30 else t.minute - 30
+        dt = t.minute % 15
         t = t - timedelta(minutes=dt)
         filename = os.path.join(fld, t.strftime('%Y%m%d-%H%M') + '.txt')
     elif rankType == 'star_hour':
         t = datetime.utcnow() + timedelta(hours=8)
-        dt = t.minute if t.minute < 30 else t.minute - 30
+        dt = t.minute % 30
         t = t - timedelta(minutes=dt)
         filename = os.path.join(fld, t.strftime('%Y%m%d-%H%M') + '.txt')
     elif rankType == 'star_day':
         t = datetime.utcnow() + timedelta(hours=8)
-        dt = t.hour if t.hour < 12 else t.hour - 12
+        dt = t.hour % 12
         t = t - timedelta(hours=dt)
         filename = os.path.join(fld, t.strftime('%Y%m%d-%H') + '.txt')
     elif rankType == 'star_week':
@@ -39,14 +39,14 @@ def rank(rankType, outfolder=None):
         filename = os.path.join(fld, t.strftime('%Y%m%d') + '.txt')
     elif rankType == 'user_day':
         t = datetime.utcnow() + timedelta(hours=8)
-        dt = t.hour if t.hour < 12 else t.hour - 12
+        dt = t.hour % 12
         t = t - timedelta(hours=dt)
         filename = os.path.join(fld, t.strftime('%Y%m%d-%H') + '.txt')
     elif rankType == 'user_week':
         t = datetime.utcnow() + timedelta(hours=8)
         filename = os.path.join(fld, t.strftime('%Y%m%d') + '.txt')
 
-    if os.path.exists(filename) and os.path.getsize(filename) > 10:
+    if os.path.exists(filename) and os.path.getsize(filename) > 100:
         logging.info('file already exists: {}'.format(filename))
         return
     try:

@@ -1,10 +1,25 @@
 #!/bin/bash
 echo `date` $0
+
+
+# cd to spider project
+#   get absolute path
+dir0=$(dirname $0)
+if [ "${dir0:0:1}"x != "/"x ]; then
+  dir0=`pwd`/$dir0
+fi
+cd $dir0
+dir0=`pwd`
+#   cd ../..
+dir0=$(dirname $dir0)
+dir0=$(dirname $dir0)
+cd $dir0
+
+
 config="config/momo-rank.json"
-cd /home/yao/files/git/spider
-python3 main.py -c $config --web momo --type rank --rankType star_hour      > /dev/null 2>&1
-python3 main.py -c $config --web momo --type rank --rankType star_potential > /dev/null 2>&1
-python3 main.py -c $config --web momo --type rank --rankType star_day       > /dev/null 2>&1
-python3 main.py -c $config --web momo --type rank --rankType star_week      > /dev/null 2>&1
-python3 main.py -c $config --web momo --type rank --rankType user_day       > /dev/null 2>&1
-python3 main.py -c $config --web momo --type rank --rankType user_week      > /dev/null 2>&1
+python3 main.py -c $config --web momo --type rank --rankType star_hour
+python3 main.py -c $config --web momo --type rank --rankType star_potential
+python3 main.py -c $config --web momo --type rank --rankType star_day
+python3 main.py -c $config --web momo --type rank --rankType star_week
+python3 main.py -c $config --web momo --type rank --rankType user_day
+python3 main.py -c $config --web momo --type rank --rankType user_week

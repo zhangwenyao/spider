@@ -17,13 +17,6 @@ def talkingdata(args):
         print('Valid Type:\n\t', type)
         return
 
-    if not args.date:
-        args.date = (datetime.datetime.today() -
-                     datetime.timedelta(days=1)).strftime("%Y%m%d")
-    if len(args.date) != 8:
-        print("Date has to be set properly in '20170101' form.")
-        return
-
     li = []
     if config[args.type]['typeId']:
         li.extend(list(config[args.type]['typeId'].keys()))
@@ -54,6 +47,13 @@ def talkingdata(args):
                            date=args.date,
                            outfile=args.outfile, outfolder=args.outfolder)
         print(args.type, 'error.')
+        return
+
+    if not args.date:
+        args.date = (datetime.datetime.today() -
+                     datetime.timedelta(days=1)).strftime("%Y%m%d")
+    if len(args.date) != 8:
+        print("Date has to be set properly in '20170101' form.")
         return
 
     if args.type == 'apprank':
