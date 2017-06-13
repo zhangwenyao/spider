@@ -1,5 +1,20 @@
 #!/bin/bash
 
+
+# cd to spider project
+#   get absolute path
+dir0=$(dirname $0)
+if [ "${dir0:0:1}"x != "/"x ]; then
+  dir0=`pwd`/$dir0
+fi
+cd $dir0
+dir0=`pwd`
+#   cd ../..
+dir0=$(dirname $dir0)
+dir0=$(dirname $dir0)
+cd $dir0
+
+
 if [ $(($#%2)) -eq 1 ] ; then
   echo "usage : $0 [-d 20170101] [-2 20170203] [-t {day,week,month,other}]"
   exit 1
