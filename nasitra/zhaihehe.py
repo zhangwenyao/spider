@@ -9,7 +9,7 @@ config = systemconfig.config
 
 def zhaihehe(args):
     type = ('d', 'day', 'w', 'week', 'm', 'month', 'o', 'other',
-            'a', 'analysis', 'anchor')
+            'a', 'analysis', 'anchor', 'dailyCrawl')
     if not args.type:
         args.type = 'day'
     if args.type not in type:
@@ -25,15 +25,11 @@ def zhaihehe(args):
         print('Valid List:\n\t', config['lists'])
         return
 
-    if not args.date:
-        args.date = (datetime.datetime.today() -
-                     datetime.timedelta(days=1)).strftime("%Y%m%d")
-
     if args.type in ('d', 'day', 'w', 'week', 'm', 'month', 'o', 'other'):
         if args.type == 'other' and not args.date2:
             print("Date2 has to be set properly with -2/--date2.")
             return
-        if len(args.date) != 8:
+        if args.date and len(args.date) != 8:
             print("Date has to be set properly in '20170101' form.")
             return
         if args.date2 and len(args.date2) != 8:
@@ -43,6 +39,10 @@ def zhaihehe(args):
         crawl(list=args.list, date=args.date, type=args.type,
               date2=args.date2, outfolder=args.outfolder)
         return
+
+    if not args.date:
+        args.date = (datetime.datetime.today() -
+                     datetime.timedelta(days=1)).strftime("%Y%m%d")
 
     if args.type in ('a', 'analysis'):
         from zhaihehe.analysis import analysis
@@ -76,6 +76,9 @@ def zhaihehe(args):
         return crawl(date=args.date, list=args.list, city=args.city,
                      sex=args.sex, fans=args.fans, outfolder=args.outfolder,
                      range1=args.range1, range2=args.range2)
+    if args.type == 'dailyCrawl':
+        from zhaihehe.dailyCrawl import crawl
+        return crawl()
 
     print('Type error:', args.type)
     return

@@ -15,6 +15,18 @@ config = systemconfig.config
 
 
 def crawl(list, date, type='d', date2=None, outfolder=None):
+    if not date:
+        if type in ('w', 'week'):
+            date = (datetime.datetime.today() -
+                    datetime.timedelta(days=7)).strftime("%Y%m%d")
+        elif type in ('m', 'month'):
+            date = (datetime.datetime.today() -
+                    datetime.timedelta(days=31)).strftime("%Y%m%d")
+        else:
+            # type in ('d', 'day', 'o', 'other'):
+            date = (datetime.datetime.today() -
+                    datetime.timedelta(days=1)).strftime("%Y%m%d")
+
     d = {
         'year': int(date[0:4]),
         'month': int(date[4:6]),
@@ -93,6 +105,8 @@ def crawl(list, date, type='d', date2=None, outfolder=None):
 
     if not os.path.exists(fld):
         os.makedirs(fld)
+    if os.path.exists(filename) and os.path.getsize(filename) > 500:
+        return
 
     print('crawl url: ', url)
     html = requests.get(url)
