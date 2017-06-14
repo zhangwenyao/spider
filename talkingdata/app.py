@@ -12,7 +12,7 @@ from general import config as systemconfig
 config = systemconfig.config
 
 
-def trend(type, typeId, appId, date=None, date2=None, dateType=None, outfile=None, outfolder=None):
+def trend(type, typeId, appId=None, date=None, date2=None, dateType=None, outfile=None, outfolder=None):
     minDay = '20160101'
     minWeek = '20150105'
     minMonth = '20150301'
@@ -111,7 +111,7 @@ def trend(type, typeId, appId, date=None, date2=None, dateType=None, outfile=Non
     return
 
 
-def profile(type, typeId, appId, date=None, outfile=None, outfolder=None):
+def profile(type, typeId, appId=None, date=None, outfile=None, outfolder=None):
     # minMonth = '20160101'
     if not date:
         date = (datetime.datetime.utcnow() + datetime.timedelta(hours=8) -
@@ -171,7 +171,7 @@ def profile(type, typeId, appId, date=None, outfile=None, outfolder=None):
     return
 
 
-def all(type, typeId, appId, date=None, date2=None, dateType=None, outfile=None, outfolder=None):
+def all(type, typeId, appId=None, date=None, date2=None, dateType=None, outfile=None, outfolder=None):
     minDay = '20160101'
     minWeek = '20150105'
     minMonth = '20150301'
@@ -268,7 +268,7 @@ def all(type, typeId, appId, date=None, date2=None, dateType=None, outfile=None,
         logging.info('file already exists: ' + filename)
         return
     logging.info('save as: ' + filename)
-    heads=list(data.keys())
+    heads = list(data.keys())
     heads.sort()
     with open(filename, 'w') as f:
         for k in heads:

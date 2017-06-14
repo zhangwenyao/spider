@@ -92,18 +92,3 @@ def crawl(type, typeId, date, rankType=None, dateType=None, outfile=None, outfol
     return
 
 
-def trend_ranking():
-    pass
-
-
-def trend_coverageRate():
-    pass
-
-
-def trend_activeRate():
-    pass
-
-
-def profile():
-    # minMonth: 20160101
-    pass

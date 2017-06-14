@@ -1,25 +1,7 @@
 #!/bin/bash
 
 
-# zhaihehe
-script/zhaihehe/day-201705.sh
-script/zhaihehe/month-201705.sh
-script/zhaihehe/week.sh
 
-
-# talkingdata
-script/talkingdata/app-day-2017.sh
-script/talkingdata/app-month-2017.sh
-script/talkingdata/app-quarter-2017.sh
-script/talkingdata/app-week.sh
-script/talkingdata/app-profile.sh
-script/talkingdata/apprank-month.sh
-script/talkingdata/apprank-quarter.sh
-script/talkingdata/apprank-week.sh
-
-
-# momo
-# script/momo/ids-star-nohup.sh
 
 
 # baiduMOTA

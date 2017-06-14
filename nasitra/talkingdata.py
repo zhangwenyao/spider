@@ -40,6 +40,9 @@ def talkingdata(args):
         return
 
     if args.type == 'app':
+        if not args.appId:
+            args.appId = '189'   # momo
+
         if args.list in ('1', '2', '3'):
             from talkingdata.app import trend
             return trend(type=args.type, typeId=args.list, appId=args.listname,
