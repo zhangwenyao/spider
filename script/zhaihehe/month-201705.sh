@@ -1,5 +1,20 @@
 #!/bin/bash
 
+
+# cd to spider project
+#   get absolute path
+dir0=$(dirname $0)
+if [ "${dir0:0:1}"x != "/"x ]; then
+  dir0=`pwd`/$dir0
+fi
+cd $dir0
+dir0=`pwd`
+#   cd ../..
+dir0=$(dirname $dir0)
+dir0=$(dirname $dir0)
+cd $dir0
+
+
 lists=(0 4 5 6 7 8 9 10 11 12 13)
 for l in ${lists[@]} ; do
   fn=data/zhaihehe/$l/month/20170501-20170531.csv

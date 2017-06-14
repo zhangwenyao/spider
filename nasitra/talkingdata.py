@@ -17,6 +17,10 @@ def talkingdata(args):
         print('Valid Type:\n\t', type)
         return
 
+    if args.type == 'dailyCrawl':
+        from talkingdata.dailyCrawl import crawl
+        return crawl()
+
     li = []
     if config[args.type]['typeId']:
         li.extend(list(config[args.type]['typeId'].keys()))
@@ -44,8 +48,13 @@ def talkingdata(args):
         if args.list == '4':
             from talkingdata.app import profile
             return profile(type=args.type, typeId=args.list, appId=args.listname,
-                           date=args.date,
-                           outfile=args.outfile, outfolder=args.outfolder)
+                           date=args.date, outfile=args.outfile, outfolder=args.outfolder)
+        if args.list == '0':
+            from talkingdata.app import all
+            return all(type=args.type, typeId=args.list, appId=args.listname,
+                       date=args.date, date2=args.date2, dateType=args.dateType,
+                       outfile=args.outfile, outfolder=args.outfolder)
+
         print(args.type, 'error.')
         return
 

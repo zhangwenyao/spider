@@ -17,6 +17,10 @@ def zhaihehe(args):
         print('Valid List:\n\t', type)
         return
 
+    if args.type == 'dailyCrawl':
+        from zhaihehe.dailyCrawl import crawl
+        return crawl()
+
     if not args.list:
         args.list = '0'
     if args.list not in config['list'].keys() \
@@ -76,9 +80,6 @@ def zhaihehe(args):
         return crawl(date=args.date, list=args.list, city=args.city,
                      sex=args.sex, fans=args.fans, outfolder=args.outfolder,
                      range1=args.range1, range2=args.range2)
-    if args.type == 'dailyCrawl':
-        from zhaihehe.dailyCrawl import crawl
-        return crawl()
 
     print('Type error:', args.type)
     return

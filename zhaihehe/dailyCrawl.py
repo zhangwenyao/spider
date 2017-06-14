@@ -15,11 +15,13 @@ def crawl():
             listsCrawl(list=l, date=date, type='day')
 
     # week
-    date = (datetime.today() - timedelta(days=7)).strftime("%Y%m%d")
-    for l in lists:
-        listsCrawl(list=l, date=date, type='week')
+    for i in range(1, 4):
+        date = (datetime.today() - timedelta(days=7 * i)).strftime("%Y%m%d")
+        for l in lists:
+            listsCrawl(list=l, date=date, type='week')
 
     # month
-    date = (datetime.today() - timedelta(days=31)).strftime("%Y%m%d")
-    for l in lists:
-        listsCrawl(list=l, date=date, type='month')
+    for i in range(1, 4):
+        date = (datetime.today() - timedelta(days=31 * i)).strftime("%Y%m%d")
+        for l in lists:
+            listsCrawl(list=l, date=date, type='month')

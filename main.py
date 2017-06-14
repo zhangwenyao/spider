@@ -82,7 +82,8 @@ def main(argv=sys.argv[1:]):
         return
     systemconfig.config = {"args":  args}
 
-    web = ('z', 'zhaihehe', 't', 'talkingdata', 'b', 'baiduMOTA', 'm', 'momo')
+    web = ('z', 'zhaihehe', 't', 'talkingdata', 'b', 'baiduMOTA',
+           'm', 'momo', 'l', 'liveme')
     if args.web not in web:
         print("Web has to be set properly with -w/--web.")
         print('Web List:\n\t', web)
