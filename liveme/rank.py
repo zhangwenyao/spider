@@ -11,23 +11,36 @@ from general import config as systemconfig
 config = systemconfig.config
 
 
-def rank(type, rankType=None, dateType=None, outfolder=None):
+def rank(type=None, rankType=None, dateType=None, outfolder=None):
+    if not type:
+        type = 'rank'
     params = config['type'][type]
-    date = datetime.today() + timedelta(hours=8) - timedelta(days=1)
-    date = date.strftime('%Y%m%d')
     if not rankType:
         rankType = params['rankType'][0]
     if not dateType:
         dateType = params['dateType'][0]
     if not outfolder:
         outfolder = type
-    fld = os.path.join('data', config['args'].web, outfolder)
-    filename = os.path.join(fld, '{}-{}-{}.txt'.format(date, rankType,
-                                                       dateType))
-    if os.path.exists(filename):
-        return
+    fld = os.path.join('data', config['args'].web, outfolder,
+                       rankType + '-' + dateType)
     if not os.path.exists(fld):
         os.makedirs(fld)
+
+
+    t = datetime.utcnow() + timedelta(hours=8)
+    dt = t.minute % 15
+    t = t - timedelta(minutes=dt)
+    filename = os.path.join(fld, t.strftime('%Y%m%d-%H%M') + '.txt')
+    # if dateType == 'week':
+        # t = datetime.utcnow() + timedelta(hours=8)
+        # filename = os.path.join(fld, t.strftime('%Y%m%d') + '.txt')
+    # else:   # 'day', 'total'
+        # t = datetime.utcnow() + timedelta(hours=8)
+        # dt = t.hour % 12
+        # t = t - timedelta(hours=dt)
+        # filename = os.path.join(fld, t.strftime('%Y%m%d-%H') + '.txt')
+    if os.path.exists(filename):
+        return
 
     url = '{}/{}/{}{}rank'.format(config['url'], params['api'], rankType,
                                   dateType)

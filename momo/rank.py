@@ -19,36 +19,43 @@ def rank(rankType, outfolder=None):
         os.makedirs(fld)
 
     t = datetime.utcnow() + timedelta(hours=8)
-    if rankType == 'star_potential':
-        t = datetime.utcnow() + timedelta(hours=8)
-        dt = t.minute % 15
-        t = t - timedelta(minutes=dt)
-        filename = os.path.join(fld, t.strftime('%Y%m%d-%H%M') + '.txt')
-    elif rankType == 'star_hour':
-        t = datetime.utcnow() + timedelta(hours=8)
-        dt = t.minute % 30
-        t = t - timedelta(minutes=dt)
-        filename = os.path.join(fld, t.strftime('%Y%m%d-%H%M') + '.txt')
-    elif rankType == 'star_day':
-        t = datetime.utcnow() + timedelta(hours=8)
-        dt = t.hour % 12
-        t = t - timedelta(hours=dt)
-        filename = os.path.join(fld, t.strftime('%Y%m%d-%H') + '.txt')
-    elif rankType == 'star_week':
-        t = datetime.utcnow() + timedelta(hours=8)
-        filename = os.path.join(fld, t.strftime('%Y%m%d') + '.txt')
-    elif rankType == 'user_day':
-        t = datetime.utcnow() + timedelta(hours=8)
-        dt = t.hour % 12
-        t = t - timedelta(hours=dt)
-        filename = os.path.join(fld, t.strftime('%Y%m%d-%H') + '.txt')
-    elif rankType == 'user_week':
-        t = datetime.utcnow() + timedelta(hours=8)
-        filename = os.path.join(fld, t.strftime('%Y%m%d') + '.txt')
+    dt = t.minute % 15
+    t = t - timedelta(minutes=dt)
+    filename = os.path.join(fld, t.strftime('%Y%m%d-%H%M') + '.txt')
+    # if rankType == 'star_potential':
+        # t = datetime.utcnow() + timedelta(hours=8)
+        # dt = t.minute % 15
+        # t = t - timedelta(minutes=dt)
+        # filename = os.path.join(fld, t.strftime('%Y%m%d-%H%M') + '.txt')
+    # elif rankType == 'star_hour':
+        # t = datetime.utcnow() + timedelta(hours=8)
+        # dt = t.minute % 15
+        # t = t - timedelta(minutes=dt)
+        # filename = os.path.join(fld, t.strftime('%Y%m%d-%H%M') + '.txt')
+    # elif rankType == 'star_day':
+        # t = datetime.utcnow() + timedelta(hours=8)
+        # dt = t.hour % 12
+        # t = t - timedelta(hours=dt)
+        # filename = os.path.join(fld, t.strftime('%Y%m%d-%H') + '.txt')
+    # elif rankType == 'star_week':
+        # t = datetime.utcnow() + timedelta(hours=8)
+        # filename = os.path.join(fld, t.strftime('%Y%m%d') + '.txt')
+    # elif rankType == 'user_day':
+        # t = datetime.utcnow() + timedelta(hours=8)
+        # dt = t.hour % 12
+        # t = t - timedelta(hours=dt)
+        # filename = os.path.join(fld, t.strftime('%Y%m%d-%H') + '.txt')
+    # elif rankType == 'user_week':
+        # t = datetime.utcnow() + timedelta(hours=8)
+        # filename = os.path.join(fld, t.strftime('%Y%m%d') + '.txt')
+    # else:
+        # logging.info('rankType error: ' + rankType)
+        # return
 
     if os.path.exists(filename) and os.path.getsize(filename) > 100:
-        logging.info('file already exists: {}'.format(filename))
+        # logging.info('file already exists: {}'.format(filename))
         return
+
     try:
         url = '{}{}'.format(config['rank']['api'], rankType)
         logging.info('crawl url: {}'.format(url))
