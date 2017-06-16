@@ -25,7 +25,7 @@ def heat(li, date, type='heat', outfolder=None):
     params = config['type'][type]
     url = '{}/{}?package={}'.format(config['url'], params['api'], li)
     url += '&end_date=' + date
-    logging.info('crawl url: ' + url)
+    logging('crawl url: ' + url)
     html = requests.get(url)
     data = json.loads(html.text)
     if 'data' not in data or len(data['data']) != 2:

@@ -15,5 +15,5 @@ dir0=$(dirname $dir0)
 cd $dir0
 
 
-python3 main.py --web baiduMOTA --type dailyCrawl
+python3 main.py --web baidu --type dailyCrawl
 

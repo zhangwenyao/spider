@@ -82,8 +82,8 @@ def main(argv=sys.argv[1:]):
         return
     systemconfig.config = {"args":  args}
 
-    web = ('z', 'zhaihehe', 't', 'talkingdata', 'b', 'baiduMOTA',
-           'm', 'momo', 'l', 'liveme')
+    web = ('z', 'zhaihehe', 't', 'talkingdata', 'b', 'baidu',
+           'm', 'momo', 's', 'so', 'l', 'liveme')
     if args.web not in web:
         print("Web has to be set properly with -w/--web.")
         print('Web List:\n\t', web)
@@ -105,12 +105,12 @@ def main(argv=sys.argv[1:]):
         from nasitra.talkingdata import talkingdata
         return talkingdata(args)
 
-    if args.web in ('b', 'baiduMOTA'):
-        args.web = 'baiduMOTA'
+    if args.web in ('b', 'baidu'):
+        args.web = 'baidu'
         if not args.config:
-            args.config = 'config/baiduMOTA.json'
+            args.config = 'config/baidu.json'
         main_load_config(args)
-        from nasitra.baiduMOTA import baiduMOTA
+        from nasitra.baidu import baiduMOTA
         return baiduMOTA(args)
 
     if args.web in ('m', 'momo'):
@@ -120,6 +120,22 @@ def main(argv=sys.argv[1:]):
         main_load_config(args)
         from nasitra.momo import momo
         return momo(args)
+
+    if args.web in ('s', 'so'):
+        args.web = 'so'
+        if not args.config:
+            args.config = 'config/so.json'
+        main_load_config(args)
+        from nasitra.so import so
+        return so(args)
+
+    if args.web in ('l', 'liveme'):
+        args.web = 'liveme'
+        if not args.config:
+            args.config = 'config/liveme.json'
+        main_load_config(args)
+        from nasitra.liveme import liveme
+        return liveme(args)
 
 
 if __name__ == "__main__":
