@@ -49,7 +49,7 @@ def main(argv=sys.argv[1:]):
                     ti = time
         if t:
             star.append('\t'.join([t, str(n)]))
-        filename = 'data/momo/star-time/' + id + '.txt'
+        filename = 'export/momo/star-time/' + id + '.txt'
         print('save file:', filename)
         with open(filename, 'w') as f:
             f.write('\n'.join(star))

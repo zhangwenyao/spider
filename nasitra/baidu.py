@@ -9,23 +9,24 @@ config = systemconfig.config
 
 def baiduMOTA(args):
     type = list(config['type'].keys())
-    type.append('all')
-    if not args.type:
-        args.type = 'all'
     if args.type not in type:
         logging.info("Type has to be set properly with -t/--type.")
         logging.info('Valid List:\n\t' + type)
         return
 
     if not args.list:
-        args.list = 'FPD9'   # momo
+        args.list = config['list']   # momo
     if len(args.list) != 4:
         logging.info("List has to be set as 4 letters with -l/--list.")
         return
 
     if args.type == 'dailyCrawl':
         from baidu.dailyCrawl import crawl
-        return crawl()
+        return crawl(li=args.list)
+
+    if args.type == 'graph':
+        from baidu.graph import graph
+        return graph(li=args.list, rankType=args.rankType)
 
     if args.type == 'heat':
         from baidu.motaApp import heat

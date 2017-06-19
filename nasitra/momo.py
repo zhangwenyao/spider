@@ -16,6 +16,10 @@ def momo(args):
         print('Valid List:\n\t', type)
         return
 
+    if args.type == 'web-counts-day':
+        from momo.count import day
+        return day(date1=args.date, date2=args.date2)
+
     if not list:
         print("List has to be set properly with -l/--list.")
         return

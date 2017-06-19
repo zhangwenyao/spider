@@ -60,7 +60,7 @@ def detailinfo(li, date=None, type='detailinfo', outfolder=None):
     if not outfolder:
         outfolder = li
     fld = os.path.join('data', config['args'].web, outfolder)
-    filename = os.path.join(fld, '{}-{}.txt'.format(date, type))
+    filename = os.path.join(fld, '{}-{}.txt'.format(date[0:6], type))
     if os.path.exists(filename):
         return
     if not os.path.exists(fld):

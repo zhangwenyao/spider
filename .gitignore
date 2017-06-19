@@ -4,5 +4,6 @@
 config
 infiles
 data
+export
 logs
 test

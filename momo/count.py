@@ -1,19 +1,15 @@
 import os
-import sys
+import logging
 from datetime import datetime, timedelta
 
 
-def main(argv=sys.argv[1:]):
-    date1 = '20170513'
-    date2 = datetime.strftime(datetime.utcnow() + timedelta(hours=8), '%Y%m%d')
-    if len(argv) > 0:
-        if len(argv) != 2:
-            print('ERROR: length of argv:', argv)
-            return
-        date1 = argv[0]
-        date2 = argv[1]
-    print(date1, date2)
+def day(date1=None, date2=None):
+    if not date1:
+        date1 = '20170513'
     ti1 = datetime.strptime(date1, '%Y%m%d')
+    if not date2:
+        date2 = datetime.strftime(
+            datetime.utcnow() + timedelta(hours=8), '%Y%m%d')
     ti2 = datetime.strptime(date2, '%Y%m%d')
 
     infile = "infiles/momo-ids.txt"
@@ -23,13 +19,13 @@ def main(argv=sys.argv[1:]):
     for id in ids:
         filename = os.path.join(
             'export', 'momo', 'star-day',
-            '{}-{]-{}.txt'.format_map(id, date1, date2))
+            '{}-{}-{}.txt'.format(id, date1, date2))
         if os.path.exists(filename):
             continue
 
         star = []
         filename = 'data/momo/star/' + id + '.txt'
-        print('read file:', filename)
+        logging.info('read file: ' + filename)
         n = 0
         dayStar = 0
         d = date1
@@ -52,7 +48,7 @@ def main(argv=sys.argv[1:]):
                             s = n
                 s = int(s)
                 if time < ti:
-                    # print('skip data:', data)
+                    logging.debug('skip data: ' + data)
                     continue
                 if time >= ti2:
                     break
@@ -63,8 +59,8 @@ def main(argv=sys.argv[1:]):
                 # renewing
                 if data[0][0:8] != d or s < n or time >= ti + timedelta(hours=6):
                     if s >= n and ti + timedelta(hours=3) <= time:
-                        print('  long interval:', data,
-                              datetime.strftime(ti, '%Y%m%d-%H%M%S'), n)
+                        logging.debug('  long interval:', data,
+                                      datetime.strftime(ti, '%Y%m%d-%H%M%S'), n)
                     dayStar += n
                     if data[0][0:8] != d:
                         star.append('\t'.join([d, str(dayStar)]))
@@ -88,10 +84,7 @@ def main(argv=sys.argv[1:]):
             dayStar = 0
             d = datetime.strftime(ti + timedelta(days=1), '%Y%m%d')
             ti = datetime.strptime(d, '%Y%m%d')
+
         with open(filename, 'w') as f:
             f.write('\n'.join(star))
-        print('save file:', filename)
-
-
-if __name__ == '__main__':
-    main()
+        logging.info('save file: ' + filename)
