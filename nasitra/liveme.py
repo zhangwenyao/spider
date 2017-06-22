@@ -9,9 +9,6 @@ config = systemconfig.config
 
 
 def liveme(args):
-    if args.type == 'dailyCrawl':
-        from liveme.dailyCrawl import crawl
-        return crawl()
 
     type = list(config['type'].keys())
     if not args.type:
@@ -21,8 +18,15 @@ def liveme(args):
         logging.info('Valid List:\n\t' + type)
         return
 
+    if args.type == 'dailyCrawl':
+        from liveme.dailyCrawl import crawl
+        return crawl()
+
     if args.type == 'rank':
         from liveme.rank import rank
         return rank(rankType=args.rankType, dateType=args.dateType,
-             type=args.type, outfolder=args.outfolder)
+                    type=args.type, outfolder=args.outfolder)
 
+    if args.type == 'graph':
+        from liveme.graph import graph
+        return graph(rankType=args.rankType, dateType=args.dateType)
