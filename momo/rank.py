@@ -23,34 +23,34 @@ def rank(rankType, outfolder=None):
     t = t - timedelta(minutes=dt)
     filename = os.path.join(fld, t.strftime('%Y%m%d-%H%M') + '.txt')
     # if rankType == 'star_potential':
-        # t = datetime.utcnow() + timedelta(hours=8)
-        # dt = t.minute % 15
-        # t = t - timedelta(minutes=dt)
-        # filename = os.path.join(fld, t.strftime('%Y%m%d-%H%M') + '.txt')
+    # t = datetime.utcnow() + timedelta(hours=8)
+    # dt = t.minute % 15
+    # t = t - timedelta(minutes=dt)
+    # filename = os.path.join(fld, t.strftime('%Y%m%d-%H%M') + '.txt')
     # elif rankType == 'star_hour':
-        # t = datetime.utcnow() + timedelta(hours=8)
-        # dt = t.minute % 15
-        # t = t - timedelta(minutes=dt)
-        # filename = os.path.join(fld, t.strftime('%Y%m%d-%H%M') + '.txt')
+    # t = datetime.utcnow() + timedelta(hours=8)
+    # dt = t.minute % 15
+    # t = t - timedelta(minutes=dt)
+    # filename = os.path.join(fld, t.strftime('%Y%m%d-%H%M') + '.txt')
     # elif rankType == 'star_day':
-        # t = datetime.utcnow() + timedelta(hours=8)
-        # dt = t.hour % 12
-        # t = t - timedelta(hours=dt)
-        # filename = os.path.join(fld, t.strftime('%Y%m%d-%H') + '.txt')
+    # t = datetime.utcnow() + timedelta(hours=8)
+    # dt = t.hour % 12
+    # t = t - timedelta(hours=dt)
+    # filename = os.path.join(fld, t.strftime('%Y%m%d-%H') + '.txt')
     # elif rankType == 'star_week':
-        # t = datetime.utcnow() + timedelta(hours=8)
-        # filename = os.path.join(fld, t.strftime('%Y%m%d') + '.txt')
+    # t = datetime.utcnow() + timedelta(hours=8)
+    # filename = os.path.join(fld, t.strftime('%Y%m%d') + '.txt')
     # elif rankType == 'user_day':
-        # t = datetime.utcnow() + timedelta(hours=8)
-        # dt = t.hour % 12
-        # t = t - timedelta(hours=dt)
-        # filename = os.path.join(fld, t.strftime('%Y%m%d-%H') + '.txt')
+    # t = datetime.utcnow() + timedelta(hours=8)
+    # dt = t.hour % 12
+    # t = t - timedelta(hours=dt)
+    # filename = os.path.join(fld, t.strftime('%Y%m%d-%H') + '.txt')
     # elif rankType == 'user_week':
-        # t = datetime.utcnow() + timedelta(hours=8)
-        # filename = os.path.join(fld, t.strftime('%Y%m%d') + '.txt')
+    # t = datetime.utcnow() + timedelta(hours=8)
+    # filename = os.path.join(fld, t.strftime('%Y%m%d') + '.txt')
     # else:
-        # logging.info('rankType error: ' + rankType)
-        # return
+    # logging.info('rankType error: ' + rankType)
+    # return
 
     if os.path.exists(filename) and os.path.getsize(filename) > 100:
         # logging.info('file already exists: {}'.format(filename))
@@ -73,3 +73,8 @@ def rank(rankType, outfolder=None):
                 f.write('\t'.join([str(i[c]) for c in heads]) + '\n')
     except:
         logging.info('data error')
+
+
+def rankAll(outfolder=None):
+    for r in config['rank']['rankType']:
+        rank(rankType=r, outfolder=outfolder)

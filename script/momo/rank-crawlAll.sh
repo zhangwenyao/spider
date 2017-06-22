@@ -17,9 +17,9 @@ cd $dir0
 
 
 config="config/momo-rank.json"
-python3 main.py -c $config --web momo --type rank --rankType star_hour
-python3 main.py -c $config --web momo --type rank --rankType star_potential
-python3 main.py -c $config --web momo --type rank --rankType star_day
-python3 main.py -c $config --web momo --type rank --rankType star_week
-python3 main.py -c $config --web momo --type rank --rankType user_day
-python3 main.py -c $config --web momo --type rank --rankType user_week
+python3 main.py --config $config --web momo --type rank --rankType star_hour
+python3 main.py --config $config --web momo --type rank --rankType star_potential
+python3 main.py --config $config --web momo --type rank --rankType star_day
+python3 main.py --config $config --web momo --type rank --rankType star_week
+python3 main.py --config $config --web momo --type rank --rankType user_day
+python3 main.py --config $config --web momo --type rank --rankType user_week

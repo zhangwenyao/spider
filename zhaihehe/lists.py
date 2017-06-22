@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import os
 import time
 import datetime
 import calendar
 import re
 import requests
-import os
+import logging
 from bs4 import BeautifulSoup
 import csv
 from general import config as systemconfig
@@ -83,7 +84,7 @@ def crawl(list, date, type='d', date2=None, outfolder=None):
 
     elif type in ('o', 'other'):
         if not date2:
-            print('error: need date2.')
+            logging.info('error: need date2.')
             return None
         d_2 = {
             'year': int(date2[0:4]),
@@ -100,7 +101,7 @@ def crawl(list, date, type='d', date2=None, outfolder=None):
         filename = os.path.join(fld, '{}-{}.csv'.format(date, date2))
 
     else:
-        print('type error: {}'.format(type))
+        logging.info('type error: ' + type)
         return None
 
     if not os.path.exists(fld):
@@ -108,7 +109,7 @@ def crawl(list, date, type='d', date2=None, outfolder=None):
     if os.path.exists(filename) and os.path.getsize(filename) > 500:
         return
 
-    print('crawl url: ', url)
+    logging.info('crawl url: ' + url)
     html = requests.get(url)
     soup = BeautifulSoup(html.text, 'lxml')
 
@@ -127,13 +128,13 @@ def crawl(list, date, type='d', date2=None, outfolder=None):
             w_row.append(t.strip() if t else '')
         datas.append(w_row)
     if len(datas) > 0:
-        print('save as: ', filename)
+        logging.info('save as: ' + filename)
         with open(filename, 'w') as f:
             csv_writer = csv.writer(f)
             csv_writer.writerow(header)
             for i in datas:
                 csv_writer.writerow(i)
     else:
-        print('data is empty:', url, filename)
+        logging.info('data is empty:\t{}\t{}'.format(url, filename))
 
     return None
