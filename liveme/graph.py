@@ -49,23 +49,42 @@ def rank_static(rankType, dateType):
         logging.info('data is empty.')
         return
     files.sort()
+    date1 = files[0][0:8]
+    date2 = files[-1][0:8]
 
     outFld = os.path.join('export', config['args'].web)
-    filename = os.path.join(outFld, '{}{}-{}{}-{}-{}.txt'.format(
-        files[0][0:8], files[0][9:13], files[-1][0:8], files[-1][9:13],
-        rankType, dateType))
+    key = '-{}-{}.txt'.format(rankType, dateType)
+    outfiles = [x for x in os.listdir(outFld)
+                if os .path.isfile(os.path.join(outFld, x))
+                and x.endswith(key) and len(x) == 8 + 1 + 8 + len(key)]
+    if outfiles:
+        outfiles.sort()
+        date1 = outfiles[-1][0:8]
+    filename = os.path.join(outFld, '{}-{}{}'.format(date1, date2, key))
     if os.path.exists(filename):
         return
     if not os.path.exists(outFld):
         os.makedirs(outFld)
 
     means = []
+    if outfiles:
+        with open(os.path.join(outFld, outfiles[-1]), 'r') as f:
+            lines = f.readlines()
+        for l in lines[1:]:
+            l.split('\t')
+            means.append(l[0], l[1])
+            infilename = l[0] + '.txt'
+            if infilename in files:
+                files.remove(infilename)
+    if not files:
+        return
+
     for d in files:
         with open(os.path.join(inFld, d), 'r') as f:
             datas = f.readlines()
         datas = [x.split('\t') for x in datas]
         if len(datas) != 31:
-            logging.info('file length != 31 error : ' + d)
+            logging.info('file length != 31 error: ' + d)
             continue
         if 'cnt' not in datas[0]:
             logging.info('data does not have "cnt" error: ' + datas[0])
@@ -88,7 +107,7 @@ def rank_graph(rankType, dateType):
     key = '-{}-{}.txt'.format(rankType, dateType)
     files = [x for x in os.listdir(fld)
              if x.endswith(key) and os.path.isfile(os.path.join(fld, x))
-             and len(x) == 12 + 1 + 12 + len(key)]
+             and len(x) == 8 + 1 + 8 + len(key)]
     if not files:
         logging.info('data is empty: {} {}'.format(rankType, dateType))
         return

@@ -24,8 +24,7 @@ def liveme(args):
 
     if args.type == 'rank':
         from liveme.rank import rank
-        return rank(rankType=args.rankType, dateType=args.dateType,
-                    type=args.type, outfolder=args.outfolder)
+        return rank(rankType=args.rankType, dateType=args.dateType)
 
     if args.type == 'graph':
         from liveme.graph import graph
