@@ -2,6 +2,6 @@
 
 lists=(FPD9)
 for l in ${lists[@]} ; do
-  echo python3 main.py --web baiduMOTA --type crowddis --list $l
-  python3 main.py --web baiduMOTA --type crowddis --list $l
+  echo python3 main.py --web baidu --type crowddis --list $l
+  python3 main.py --web baidu --type crowddis --list $l
 done

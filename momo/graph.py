@@ -88,7 +88,7 @@ def starDay_graph():
     try:
         # code = 0
         sh = os.path.join('script', 'gnuplot_eps_pdf.sh')
-        plt = os.path.join(config['args'].web, 'star-day-means.plt')
+        plt = os.path.join('config', config['args'].web, 'star-day-means.plt')
         cmd = '{} {} {} \\"{}\\"'.format(sh, plt, outfile, infile)
         out_bytes = subprocess.check_output(cmd, stderr=subprocess.STDOUT,
                                             shell=True)
@@ -194,7 +194,7 @@ def rankStarHour_graph():
     try:
         # code = 0
         sh = os.path.join('script', 'gnuplot_eps_pdf.sh')
-        plt = os.path.join(config['args'].web, 'rankStarHour.plt')
+        plt = os.path.join('config', config['args'].web, 'rankStarHour.plt')
         cmd = '{} {} {} \\"{}\\"'.format(sh, plt, outfile, infile)
         out_bytes = subprocess.check_output(cmd, stderr=subprocess.STDOUT,
                                             shell=True)
@@ -225,7 +225,8 @@ def rankStarHour_day_graph():
     try:
         # code = 0
         sh = os.path.join('script', 'gnuplot_eps_pdf.sh')
-        plt = os.path.join(config['args'].web, 'rankStarHour-day.plt')
+        plt = os.path.join(
+            'config', config['args'].web, 'rankStarHour-day.plt')
         cmd = '{} {} {} \\"{}\\"'.format(sh, plt, outfile, infile)
         out_bytes = subprocess.check_output(cmd, stderr=subprocess.STDOUT,
                                             shell=True)

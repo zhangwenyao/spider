@@ -94,13 +94,13 @@ def detailRank_graph(li):
     try:
         code = 0
         sh = os.path.join('script', 'gnuplot_eps_pdf.sh')
-        plt = os.path.join(config['args'].web, 'detailRankAll.plt')
+        plt = os.path.join('config', config['args'].web, 'detailRankAll.plt')
         outfile2 = outfile + 'All'
         cmd = '{} {} {} \\"{}\\"'.format(sh, plt, outfile2, infile)
         out_bytes = subprocess.check_output(cmd, stderr=subprocess.STDOUT,
                                             shell=True)
         logging.info('save files: ' + outfile2)
-        plt = os.path.join(config['args'].web, 'detailRankCate.plt')
+        plt = os.path.join('config', config['args'].web, 'detailRankCate.plt')
         outfile2 = outfile + 'Cate'
         cmd = '{} {} {} \\"{}\\"'.format(sh, plt, outfile2, infile)
         out_bytes = subprocess.check_output(cmd, stderr=subprocess.STDOUT,
@@ -170,7 +170,7 @@ def index_graph(li):
     try:
         code = 0
         sh = os.path.join('script', 'gnuplot_eps_pdf.sh')
-        plt = os.path.join(config['args'].web, 'index.plt')
+        plt = os.path.join('config', config['args'].web, 'index.plt')
         cmd = '{} {} {} \\"{}\\"'.format(sh, plt, outfile, infile)
         out_bytes = subprocess.check_output(cmd, stderr=subprocess.STDOUT,
                                             shell=True)

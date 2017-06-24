@@ -92,7 +92,7 @@ def main(argv=sys.argv[1:]):
     if args.web in ('z', 'zhaihehe'):
         args.web = 'zhaihehe'
         if not args.config:
-            args.config = 'config/zhaihehe.json'
+            args.config = 'config/{}/{}.json'.format(args.web, args.web)
         main_load_config(args)
         from nasitra.zhaihehe import zhaihehe
         return zhaihehe(args)
@@ -100,7 +100,7 @@ def main(argv=sys.argv[1:]):
     if args.web in ('t', 'talkingdata'):
         args.web = 'talkingdata'
         if not args.config:
-            args.config = 'config/talkingdata.json'
+            args.config = 'config/{}/{}.json'.format(args.web, args.web)
         main_load_config(args)
         from nasitra.talkingdata import talkingdata
         return talkingdata(args)
@@ -108,7 +108,7 @@ def main(argv=sys.argv[1:]):
     if args.web in ('b', 'baidu'):
         args.web = 'baidu'
         if not args.config:
-            args.config = 'config/baidu.json'
+            args.config = 'config/{}/{}.json'.format(args.web, args.web)
         main_load_config(args)
         from nasitra.baidu import baiduMOTA
         return baiduMOTA(args)
@@ -116,7 +116,7 @@ def main(argv=sys.argv[1:]):
     if args.web in ('m', 'momo'):
         args.web = 'momo'
         if not args.config:
-            args.config = 'config/momo.json'
+            args.config = 'config/{}/{}.json'.format(args.web, args.web)
         main_load_config(args)
         from nasitra.momo import momo
         return momo(args)
@@ -124,7 +124,7 @@ def main(argv=sys.argv[1:]):
     if args.web in ('s', 'so'):
         args.web = 'so'
         if not args.config:
-            args.config = 'config/so.json'
+            args.config = 'config/{}/{}.json'.format(args.web, args.web)
         main_load_config(args)
         from nasitra.so import so
         return so(args)
@@ -132,7 +132,7 @@ def main(argv=sys.argv[1:]):
     if args.web in ('l', 'liveme'):
         args.web = 'liveme'
         if not args.config:
-            args.config = 'config/liveme.json'
+            args.config = 'config/{}/{}.json'.format(args.web, args.web)
         main_load_config(args)
         from nasitra.liveme import liveme
         return liveme(args)

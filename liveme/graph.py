@@ -120,7 +120,7 @@ def rank_graph(rankType, dateType):
     try:
         # code = 0
         sh = os.path.join('script', 'gnuplot_eps_pdf.sh')
-        plt = os.path.join(config['args'].web,
+        plt = os.path.join('config', config['args'].web,
                            '{}-{}.plt'.format(rankType, dateType))
         cmd = '{} {} {} \\"{}\\"'.format(sh, plt, outfile, infile)
         out_bytes = subprocess.check_output(cmd, stderr=subprocess.STDOUT,

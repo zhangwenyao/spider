@@ -16,5 +16,5 @@ dir0=$(dirname $dir0)
 cd $dir0
 
 
-config="config/liveme-rank.json"
+config="config/liveme/liveme-rank.json"
 python3 main.py --config $config --web liveme --type rank --rankType all --dateType all
