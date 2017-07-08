@@ -25,4 +25,6 @@ def crawl():
         out_bytes = e.output
         logging.info('join-count-day error')
         logging.debug(out_bytes)
+
     graph(rankType='starDay')
+    graph(rankType='rankStarHour')

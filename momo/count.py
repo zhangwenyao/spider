@@ -61,8 +61,8 @@ def day(date1=None, date2=None):
                 # renewing
                 if data[0][0:8] != d or s < n or time >= ti + timedelta(hours=6):
                     if s >= n and ti + timedelta(hours=3) <= time:
-                        logging.debug('  long interval:', data,
-                                      datetime.strftime(ti, '%Y%m%d-%H%M%S'), n)
+                        logging.debug('  long interval:\t{}\t{}\t{}'.format(
+                            data, datetime.strftime(ti, '%Y%m%d-%H%M%S'), n))
                     dayStar += n
                     if data[0][0:8] != d:
                         star.append('\t'.join([d, str(dayStar)]))

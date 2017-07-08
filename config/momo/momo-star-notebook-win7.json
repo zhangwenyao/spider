@@ -1,11 +1,10 @@
 {
+    "html":{
+        "url":  "https://web.immomo.com/live"
+    },
+    "type": ["web", "web2"],
     "folders": {
-        "configdir":    "config",
-        "logdir":   "logs",
-        "datadir":  "data",
-        "exportdir":    "export",
-        "pltdir":   "config",
-        "accountdir":   "test"
+        "logdir": "logs"
     },
     "logconfig": {
         "version": 1,
@@ -29,7 +28,7 @@
                 "level": "DEBUG",
                 "formatter": "standard",
                 "class": "logging.FileHandler",
-                "filename": "spider.log"
+                "filename": "momo-ids-star-notebook-win7.log"
             },
             "gmail": {
                 "level": "INFO",
@@ -37,7 +36,7 @@
                 "formatter": "mail",
                 "fromaddr": "rxq.proxy@gmail.com",
                 "toaddrs": ["wenyao.zhang@unifr.ch"],
-                "subject": "spider",
+                "subject": "momo ids star",
                 "credentials": ["rxq.proxy@gmail.com", "njhpmandskgawjjt"],
                 "mailhost": ["smtp.gmail.com", 587]
             }
@@ -53,7 +52,7 @@
             }
         },
         "root": {
-            "level": "DEBUG",
+            "level": "INFO",
             "handlers": ["console", "file"]
         }
     }

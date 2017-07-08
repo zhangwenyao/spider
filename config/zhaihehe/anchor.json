@@ -19,7 +19,7 @@
         "美拍": "12",
         "来疯": "13"
     },
-    "type": ["d", "day", "w", "week", "m", "month", "o", "other", "a", "analysis", "anchor", "momoIds", "dailyCrawl", "graph"],
+    "type": ["d", "day", "w", "week", "m", "month", "o", "other", "a", "analysis", "anchor", "dailyCrawl", "graph"],
     "city":{
         "全部": "0",
         "北京市":   "16",
@@ -104,7 +104,7 @@
                 "level": "DEBUG",
                 "formatter": "standard",
                 "class": "logging.FileHandler",
-                "filename": "zhaihehe.log"
+                "filename": "zhaihehe-anchor.log"
             },
             "gmail": {
                 "level": "INFO",

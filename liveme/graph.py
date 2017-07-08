@@ -71,8 +71,8 @@ def rank_static(rankType, dateType):
         with open(os.path.join(outFld, outfiles[-1]), 'r') as f:
             lines = f.readlines()
         for l in lines[1:]:
-            l.split('\t')
-            means.append(l[0], l[1])
+            l = l.strip().split('\t')
+            means.append([l[0], l[1]])
             infilename = l[0] + '.txt'
             if infilename in files:
                 files.remove(infilename)
@@ -85,6 +85,7 @@ def rank_static(rankType, dateType):
         datas = [x.split('\t') for x in datas]
         if len(datas) != 31:
             logging.info('file length != 31 error: ' + d)
+            means.append(['#' + d[0:13], -1])
             continue
         if 'cnt' not in datas[0]:
             logging.info('data does not have "cnt" error: ' + datas[0])

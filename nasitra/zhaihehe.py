@@ -8,8 +8,7 @@ config = systemconfig.config
 
 
 def zhaihehe(args):
-    type = ('d', 'day', 'w', 'week', 'm', 'month', 'o', 'other',
-            'a', 'analysis', 'anchor', 'dailyCrawl')
+    type = config['type']
     if not args.type:
         args.type = 'day'
     if args.type not in type:
@@ -80,6 +79,14 @@ def zhaihehe(args):
         return crawl(date=args.date, list=args.list, city=args.city,
                      sex=args.sex, fans=args.fans, outfolder=args.outfolder,
                      range1=args.range1, range2=args.range2)
+
+    if args.type == 'momoIds':
+        from zhaihehe.anchor import momoIds
+        return momoIds(infolder=args.infolder, outfolder=args.outfolder)
+
+    if args.type == 'graph':
+        from zhaihehe.graph import graph
+        return graph(li=args.list, rankType=args.rankType)
 
     print('Type error:', args.type)
     return

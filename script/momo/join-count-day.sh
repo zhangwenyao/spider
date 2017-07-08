@@ -16,7 +16,7 @@ dir0=$(dirname $dir0)
 cd $dir0
 
 
-cmd="python3 main.py --web momo --config config/momo.json --type web-counts-day"
+cmd="python3 main.py --web momo --type web-counts-day"
 echo "$cmd"
 echo "$cmd" | sh
 
@@ -36,6 +36,9 @@ n=0
 header="#date"
 for id in ${ids[@]} ;  do
   #echo $id
+  if [ ! -f $id-$d1-$d2.txt ] ; then
+    exit 0
+  fi
   header="$header $id"
   if [ $n -eq 0 ] ; then
     cmd="cat $id-$d1-$d2.txt"

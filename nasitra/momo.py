@@ -62,3 +62,7 @@ def momo(args):
     if args.type == 'rankAll':
         from momo.rank import rankAll
         return rankAll(outfolder=args.outfolder)
+
+    if args.type == 'news':
+        from momo.news import news
+        return news()

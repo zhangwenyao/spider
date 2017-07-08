@@ -136,7 +136,10 @@ def rankStarHour_static():
         d = [x[index] for x in d]
         s = 0.0
         for i in d:
-            if '千万' in i:
+            if '亿' in i:
+                i = i.replace('亿', '')
+                i = float(i) * 100000000
+            elif '千万' in i:
                 i = i.replace('千万', '')
                 i = float(i) * 10000000
             elif '万' in i:
@@ -157,8 +160,6 @@ def rankStarHour_static():
             f.write('{}\t{}\n'.format(x[0], x[1]))
     logging.info('save file: ' + filename)
 
-    filename2 = os.path.join(outfld, '{}_{}.txt'.format(
-        files[0][:8], files[-1][:8]))
     datas = {}
     for x in means:
         date = x[0][0:8]
@@ -167,13 +168,18 @@ def rankStarHour_static():
         datas[date].append(x[1])
     dates = list(datas.keys())
     dates.sort()
+    del dates[-1]
+    filename2 = os.path.join(outfld, '{}_{}.txt'.format(
+        dates[0], dates[-1]))
+    if os.path.exists(filename2):
+        return
     with open(filename2, 'w') as f:
         f.write('#date\tmean\n')
         for date in dates:
             s = 0.0
             for x in datas[date]:
                 s += x
-            f.write('{}\t{}\n'.format(date, s / len(datas[date])))
+            f.write('{}\t{}\n'.format(date, s / len(datas[date]) * 24))
 
 
 def rankStarHour_graph():
@@ -218,22 +224,39 @@ def rankStarHour_day_graph():
         return
     files.sort()
     infile = os.path.join(fld, files[-1])
-    outfile = infile[:-4]
-    if os.path.exists(outfile + '.eps'):
-        return
 
-    try:
-        # code = 0
-        sh = os.path.join('script', 'gnuplot_eps_pdf.sh')
-        plt = os.path.join(
-            'config', config['args'].web, 'rankStarHour-day.plt')
-        cmd = '{} {} {} \\"{}\\"'.format(sh, plt, outfile, infile)
-        out_bytes = subprocess.check_output(cmd, stderr=subprocess.STDOUT,
-                                            shell=True)
-        logging.info('save files: ' + outfile)
-    except subprocess.CalledProcessError as e:
-        out_bytes = e.output
-        # code = e.returncode
-        # return code, out_bytes
-        logging.info('graph error')
-        logging.debug(out_bytes)
+    outfile = infile[:-4]
+    if not os.path.exists(outfile + '.eps'):
+        try:
+            # code = 0
+            sh = os.path.join('script', 'gnuplot_eps_pdf.sh')
+            plt = os.path.join(
+                'config', config['args'].web, 'rankStarHour-day.plt')
+            cmd = '{} {} {} \\"{}\\"'.format(sh, plt, outfile, infile)
+            out_bytes = subprocess.check_output(cmd, stderr=subprocess.STDOUT,
+                                                shell=True)
+            logging.info('save files: ' + outfile)
+        except subprocess.CalledProcessError as e:
+            out_bytes = e.output
+            # code = e.returncode
+            # return code, out_bytes
+            logging.info('graph error')
+            logging.debug(out_bytes)
+
+    outfile = infile[:-4] + '-log'
+    if not os.path.exists(outfile + '.eps'):
+        try:
+            # code = 0
+            sh = os.path.join('script', 'gnuplot_eps_pdf.sh')
+            plt = os.path.join(
+                'config', config['args'].web, 'rankStarHour-day-log.plt')
+            cmd = '{} {} {} \\"{}\\"'.format(sh, plt, outfile, infile)
+            out_bytes = subprocess.check_output(cmd, stderr=subprocess.STDOUT,
+                                                shell=True)
+            logging.info('save files: ' + outfile)
+        except subprocess.CalledProcessError as e:
+            out_bytes = e.output
+            # code = e.returncode
+            # return code, out_bytes
+            logging.info('graph error')
+            logging.debug(out_bytes)
