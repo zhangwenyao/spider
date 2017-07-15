@@ -13,7 +13,7 @@ def day(date1=None, date2=None):
     ti2 = datetime.strptime(date2, '%Y%m%d')
     date3 = (ti2 - timedelta(days=1)).strftime('%Y%m%d')
 
-    infile = os.path.join('infiles', 'momo-ids.txt')
+    infile = os.path.join('infiles', 'momo-ids-18users.txt')
     with open(infile, 'r') as f:
         ids = f.read().split()
     star = {}
@@ -94,7 +94,7 @@ def day(date1=None, date2=None):
 
 
 def time():
-    infile = os.path.join('infiles', 'momo-ids.txt')
+    infile = os.path.join('infiles', 'momo-ids-18users.txt')
     with open(infile, 'r') as f:
         ids = f.read().split()
     for id in ids:

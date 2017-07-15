@@ -113,13 +113,36 @@ def rankStarHour_static():
     files.sort()
 
     outfld = os.path.join('export', config['args'].web, 'rankStarHour')
+    outfiles = [x for x in os.listdir(outfld)
+                if os.path.isfile(os.path.join(outfld, x))
+                and x.endswith('.txt')
+                and len(x) == 13 + 1 + 13 + 4]
+    if outfiles:
+        outfiles.sort()
+        time1 = outfiles[-1][:13]
+        time2 = outfiles[-1][14:27]
+        if time1 > files[0][:13]:
+            time1 = files[0][:13]
+        if time2 < files[-1][:13]:
+            time2 = files[-1][:13]
+    else:
+        time1 = files[0][:13]
+        time2 = files[-1][:13]
     filename = os.path.join(outfld, '{}_{}.txt'.format(
-        files[0][:13], files[-1][:13]))
+        time1, time2))
     if os.path.exists(filename):
         return
 
-    means = []
+    means = {}
+    if outfiles:
+        with open(os.path.join(outfld, outfiles[-1]), 'r') as f:
+            d = f.readlines()
+        d = [x.strip().split() for x in d[1:]]
+        for x in d:
+            means[x[0]] = x[1]
     for x in files:
+        if x[:13] in means:
+            continue
         with open(os.path.join(infld, x), 'r') as f:
             d = f.readlines()
         head = d[0]
@@ -152,34 +175,56 @@ def rankStarHour_static():
                 i = float(i)
             s += i
         s /= len(d)
-        means.append([x[:13], s])
+        means[x[:13]] = str(s)
 
+    keys = list(means.keys())
+    keys.sort()
     with open(filename, 'w') as f:
         f.write('#time\tmean\n')
-        for x in means:
-            f.write('{}\t{}\n'.format(x[0], x[1]))
+        for x in keys:
+            f.write('{}\t{}\n'.format(x, means[x]))
     logging.info('save file: ' + filename)
 
+    outfiles = [x for x in os.listdir(outfld)
+                if os.path.isfile(os.path.join(outfld, x))
+                and x.endswith('.txt')
+                and len(x) == 8 + 1 + 8 + 4]
+    if outfiles:
+        outfiles.sort()
+        date1 = outfiles[-1][:8]
+        date2 = outfiles[-1][9:17]
+        if date1 > files[0][:8]:
+            date1 = files[0][:8]
+        if date2 < files[-1][:8]:
+            date2 = files[-1][:8]
+    else:
+        date1 = files[0][:8]
+        date2 = files[-1][:8]
+    filename = os.path.join(outfld, '{}_{}.txt'.format(
+        date1, date2))
+    if os.path.exists(filename):
+        return
     datas = {}
     for x in means:
-        date = x[0][0:8]
+        date = x[0:8]
         if date not in datas:
             datas[date] = []
-        datas[date].append(x[1])
+        datas[date].append(means[x])
     dates = list(datas.keys())
     dates.sort()
-    del dates[-1]
-    filename2 = os.path.join(outfld, '{}_{}.txt'.format(
-        dates[0], dates[-1]))
-    if os.path.exists(filename2):
-        return
-    with open(filename2, 'w') as f:
+    # del dates[-1]
+    # filename = os.path.join(outfld, '{}_{}.txt'.format(
+    # dates[0], dates[-1]))
+    # if os.path.exists(filename):
+    # return
+    with open(filename, 'w') as f:
         f.write('#date\tmean\n')
         for date in dates:
             s = 0.0
             for x in datas[date]:
-                s += x
+                s += float(x)
             f.write('{}\t{}\n'.format(date, s / len(datas[date]) * 24))
+    logging.info('save file: ' + filename)
 
 
 def rankStarHour_graph():
