@@ -13,8 +13,8 @@ config = systemconfig.config
 def graph(li=None, rankType=None):
     if not li:
         li = '8'
-    if not rankType:
-        rankType = 'day'
+        if not rankType:
+            rankType = 'day'
 
     data_static(li, rankType)
     data_graph(li, rankType)
@@ -42,12 +42,48 @@ def data_static(li, rankType):
                 if '虚拟币' not in r:
                     logging.info('虚拟币 not in file error: ' + x)
                     return
-                v = int(r['虚拟币'])
+                v= int(r['虚拟币'])
+                if '亿' in v:
+                    v=v.replace('亿','00000000')
+                elif '万' in v:
+                    v=v.replace('万','0000')
+                elif '千' in v:
+                    v=v.replace('千','000')
+
+                v = int(v)
                 if v < 10000:
                     logging.debug('虚拟币 < 10000:\t{}\t{}\t{}'.format(v, x, r))
                     break
                 s += v
                 l += 1
+                if l != 20:
+                    logging.debug('data length != 20 error:\t{}\t{}'.format(l, x))
+                    continue
+        means.append([x[0:8], s / 20.0])
+
+    if not means:
+        logging.info('data is empty')
+        return
+    fld = os.path.join('export', config['args'].web, li)
+    filename = os.path.join(fld, '{}-{}-{}-means.txt'.format(
+        means[0][0], means[-1][0], rankType))
+    if os.path.exists(filename):
+        return
+    if not os.path.exists(fld):
+        v= int(r['虚拟币'])
+        if '亿' in v:
+            v=v.replace('亿','00000000')
+        elif '万' in v:
+            v=v.replace('万','0000')
+        elif '千' in v:
+            v=v.replace('千','000')
+
+        v = int(v)
+        if v < 10000:
+            logging.debug('虚拟币 < 10000:\t{}\t{}\t{}'.format(v, x, r))
+            break
+        s += v
+        l += 1
         if l != 20:
             logging.debug('data length != 20 error:\t{}\t{}'.format(l, x))
             continue
@@ -68,7 +104,7 @@ def data_static(li, rankType):
         f.write('#date\tmean\n')
         for x in means:
             f.write('{}\t{}\n'.format(x[0], x[1]))
-    logging.info('save file: ' + filename)
+            logging.info('save file: ' + filename)
 
 
 def data_graph(li, rankType):

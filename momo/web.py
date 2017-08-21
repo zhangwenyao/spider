@@ -64,11 +64,11 @@ def web2(infile, loop=1, outfolder=None, onlyprint=False):
 def get_star(driver, id, time_out=20):
     url = '{}/{}'.format(config['html']['url'], id)
     logging.info('crawl url: {}'.format(url))
-    star = '0'
+    star = None
     t = 0
     try:
         driver.get(url)
-        flag = True
+        # flag = True
         while t < time_out:
             # if url != driver.current_url:
                 # break
@@ -76,12 +76,13 @@ def get_star(driver, id, time_out=20):
                 elem = driver.find_element_by_xpath(
                     '//strong[@class="starNum star"]')
                 star = elem.text
-                if int(star) > 0:
+                if star and star != '0':
+                    # if int(star) > 0:
                     break
             except:
-                if flag and star and star != '0':
-                    time_out += 60
-                    flag = False
+                # if flag and star and star != '0':
+                    # time_out += 60
+                    # flag = False
                 pass
             time.sleep(0.1)
             t += 0.1
@@ -99,7 +100,11 @@ def get_star(driver, id, time_out=20):
                 time.sleep(5)
     except:
         pass
-    if star == '0' and t >= time_out:
+    if not star:
+        star = '0'
+        logging.info('data error')
+        time.sleep(60)
+    elif star == '0' and t >= time_out:
         logging.info('time_out: {}'.format(t))
     else:
         logging.info('time waited: {}'.format(t))
