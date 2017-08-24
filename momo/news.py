@@ -11,12 +11,19 @@ config = systemconfig.config
 
 
 def news():
+    dir = os.path.join(config['folders']['datadir'],
+                       config['args'].web)
+    dir2 = os.path.join(dir,'news')
+    if not os.path.exists(dir):
+        os.makedirs(dir)
+
     filename = os.path.join(config['folders']['datadir'],
                             config['args'].web, 'news.txt')
     news = []
     if os.path.exists(filename):
         with open(filename, 'r') as f:
             datas = f.readlines()
+
         datas = [x.strip().split('\t') for x in datas[1:]]
         news = [{'date': x[0], 'url':x[1], 'title':x[2]} for x in datas]
 
@@ -33,7 +40,9 @@ def news():
                 break
             else:
                 n2.insert(0, x)
+
         page += 1
+
     if not n2:
         return
 
@@ -42,6 +51,12 @@ def news():
         f.write('#date\turl\ttitle\n')
         for n in news:
             f.write('{}\t{}\t{}\n'.format(n['date'], n['url'], n['title']))
+            try:
+                ourfile = os.path.join(config['folders']['datadir'], config['args'].web,
+                                       'news', url[32:])
+            except:
+                pass
+
     logging.info('save file: ' + filename)
 
 
@@ -51,6 +66,7 @@ def newsInPage(news, page):
         if x['url'] == news['url']:
             flag = True
             break
+
     return flag
 
 
@@ -73,7 +89,21 @@ def get_page(page):
                 news.append(data)
     except:
         logging.debug('data error: ' + url)
-    if news:
-        return news
-    else:
-        return None
+        if news:
+            return news
+        else:
+            return None
+
+
+def html(url, outfile):
+    try:
+        h = requests.get(url)
+        soup = BeautifulSoup(h.text, 'lxml')
+        s = soup.findAll('section')
+        with open(outfile, 'w') as f:
+            f.write(s)
+
+        logging.info('save file: {}'.format(outfile))
+    except:
+        logging.info('get news error: {}'.format(url))
+

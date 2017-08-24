@@ -108,10 +108,12 @@ def get_star(driver, id, time_out=20):
         logging.info('time_out: {}'.format(t))
     else:
         logging.info('time waited: {}'.format(t))
+
     return star, exact_time
 
 
 def save(filename, exact_time, star):
-    logging.info('save into file: {}'.format(filename))
     with open(filename, 'a') as f:
         f.write('{}\t{}\n'.format(exact_time, star))
+
+    logging.info('save into file: {}'.format(filename))
