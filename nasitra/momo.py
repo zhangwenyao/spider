@@ -30,6 +30,15 @@ def momo(args):
         web(id=args.list, outfolder=args.outfolder, onlyprint=args.onlyprint)
         return
 
+    if args.type == 'webd':
+        if not args.list:
+            print("List has to be set properly with -l/--list")
+            return
+        from momo.web import web
+        web(id=args.list, outfolder=args.outfolder, onlyprint=args.onlyprint,
+            nodisplay=True)
+        return
+
     if args.type == 'web2':
         if not args.infile:
             print("Infile has to be set properly with -i/--infile.")
@@ -37,6 +46,16 @@ def momo(args):
         from momo.web import web2
         web2(infile=args.infile, loop=args.list,
              outfolder=args.outfolder, onlyprint=args.onlyprint)
+        return
+
+    if args.type == 'web2d':
+        if not args.infile:
+            print("Infile has to be set properly with -i/--infile.")
+            return
+        from momo.web import web2
+        web2(infile=args.infile, loop=args.list,
+             outfolder=args.outfolder, onlyprint=args.onlyprint,
+             nodisplay=True)
         return
 
     if args.date and len(args.date) != 8:

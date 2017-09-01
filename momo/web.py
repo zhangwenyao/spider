@@ -5,19 +5,25 @@ import os
 import time
 import datetime
 import logging
+from pyvirtualdisplay import Display
 from selenium import webdriver
 from general import config as systemconfig
 
 config = systemconfig.config
 
 
-def web(id, outfolder=None, onlyprint=False):
+def web(id, outfolder=None, onlyprint=False, nodisplay=False):
     if not onlyprint:
         if not outfolder:
             outfolder = 'star'
+
         fld = os.path.join('data', config['args'].web, outfolder)
         if not os.path.exists(fld):
             os.makedirs(fld)
+
+    if nodisplay:
+        display=Display(visible=0,size=(800,600))
+        display.start()
 
     driver = webdriver.Chrome()
     try:
@@ -29,28 +35,39 @@ def web(id, outfolder=None, onlyprint=False):
         driver.close()
         driver.quit()
 
+    if nodisplay:
+        display.stop()
 
-def web2(infile, loop=1, outfolder=None, onlyprint=False):
+
+def web2(infile, loop=1, outfolder=None, onlyprint=False, nodisplay=False):
     if not onlyprint:
         if not outfolder:
             outfolder = 'star'
+
         fld = os.path.join('data', config['args'].web, outfolder)
         if not os.path.exists(fld):
             os.makedirs(fld)
 
     with open(infile, 'r') as f:
         lines = f.readlines()
+
     ids = [i.strip() for i in lines]
+
+    if nodisplay:
+        display=Display(visible=0,size=(800,600))
+        display.start()
 
     driver = webdriver.Chrome()
     try:
         if not loop:
             loop = 1
+
         loop = int(loop)
         l = 0
         while loop <= 0 or l < loop:
             if l < loop:
                 l += 1
+
             for id in ids:
                 star, exact_time = get_star(driver, id)
                 if not onlyprint:
@@ -60,6 +77,9 @@ def web2(infile, loop=1, outfolder=None, onlyprint=False):
         driver.close()
         driver.quit()
 
+    if nodisplay:
+        display.stop()
+
 
 def get_star(driver, id, time_out=20):
     url = '{}/{}'.format(config['html']['url'], id)
@@ -68,25 +88,21 @@ def get_star(driver, id, time_out=20):
     t = 0
     try:
         driver.get(url)
-        # flag = True
         while t < time_out:
-            # if url != driver.current_url:
-                # break
+            if url != driver.current_url:
+                break
+
             try:
                 elem = driver.find_element_by_xpath(
                     '//strong[@class="starNum star"]')
                 star = elem.text
                 if star and star != '0':
-                    # if int(star) > 0:
                     break
             except:
-                # if flag and star and star != '0':
-                    # time_out += 60
-                    # flag = False
                 pass
+
             time.sleep(0.1)
-            t += 0.1
-            t = round(t, 1)
+            t = round(t + 0.1, 1)
     except:
         pass
     exact_time = (datetime.datetime.utcnow() +
@@ -96,8 +112,10 @@ def get_star(driver, id, time_out=20):
         if url != driver.current_url:
             logging.info('ERROR: user {} does not exist. New url: {}'.format(
                 id, driver.current_url))
-            while url != driver.current_url:
-                time.sleep(5)
+            if driver.current_url == config['html']['url']:
+                time.sleep(60*5)
+                # while url != driver.current_url:
+                    # time.sleep(5)
     except:
         pass
     if not star:

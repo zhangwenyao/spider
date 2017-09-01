@@ -2,7 +2,7 @@
     "html":{
         "url":  "https://web.immomo.com/live"
     },
-    "type": ["web", "web2", "rank"],
+    "type": ["web", "webd", "web2", "web2d", "web-counts-day", "web-counts-time", "rank", "rankAll", "dailyCrawl", "graph", "news"],
     "rank":{
         "api":  "https://live-api.immomo.com/m/rank/lists?rank=",
         "rankType": ["star_day", "star_potential", "star_hour", "star_week", "user_day", "user_week"]

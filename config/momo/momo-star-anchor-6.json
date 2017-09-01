@@ -2,7 +2,7 @@
     "html":{
         "url":  "https://web.immomo.com/live"
     },
-    "type": ["web", "web2"],
+    "type": ["web", "webd", "web2", "web2d", "web-counts-day", "web-counts-time", "rank", "rankAll", "dailyCrawl", "graph", "news"],
     "folders": {
         "logdir": "logs"
     },
