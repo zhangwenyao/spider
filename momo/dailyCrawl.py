@@ -28,3 +28,4 @@ def crawl():
 
     graph(rankType='starDay')
     graph(rankType='rankStarHour')
+    graph(rankType='rankStarHour2')

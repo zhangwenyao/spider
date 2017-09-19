@@ -5,7 +5,7 @@
     "type": ["web", "webd", "web2", "web2d", "web-counts-day", "web-counts-time", "rank", "rankAll", "dailyCrawl", "graph", "news"],
     "rank":{
         "api":  "https://live-api.immomo.com/m/rank/lists?rank=",
-        "rankType": ["star_day", "star_potential", "star_hour", "star_week", "user_day", "user_week"]
+        "rankType": ["star_day", "star_potential", "star_hour", "star_hour2", "star_week", "user_day", "user_week"]
     },
     "folders": {
         "logdir": "logs"
