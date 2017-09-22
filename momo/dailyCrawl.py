@@ -27,5 +27,5 @@ def crawl():
         logging.debug(out_bytes)
 
     graph(rankType='starDay')
-    graph(rankType='rankStarHour')
+    # graph(rankType='rankStarHour')
     graph(rankType='rankStarHour2')

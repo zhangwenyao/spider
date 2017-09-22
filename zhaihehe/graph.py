@@ -17,8 +17,9 @@ def graph(li=None, rankType=None):
     if not rankType:
         rankType = 'day'
 
-    data_static(li, rankType)
-    data_graph(li, rankType)
+    if rankType=='day':
+        data_static(li, rankType)
+        data_graph(li, rankType)
 
 
 def data_static(li, rankType):
@@ -31,6 +32,7 @@ def data_static(li, rankType):
     if not files:
         logging.info('files is empty')
         return
+
     files.sort()
 
     means = []
@@ -43,11 +45,13 @@ def data_static(li, rankType):
                 if '虚拟币' not in r:
                     logging.info('虚拟币 not in file error: ' + x)
                     return
+
                 v= r['虚拟币']
                 vP = 1
                 if '亿' in v:
                     v=v.replace('亿','')
                     vP = 100000000
+
                 elif '万' in v:
                     v=v.replace('万','')
                     vP=10000
@@ -56,6 +60,7 @@ def data_static(li, rankType):
                 if v < 10000:
                     logging.debug('虚拟币 < 10000:\t{}\t{}\t{}'.format(v, x, r))
                     break
+
                 s += v
                 l += 1
 
@@ -74,6 +79,7 @@ def data_static(li, rankType):
         means[0][0], means[-1][0], rankType))
     if os.path.exists(filename):
         return
+
     if not os.path.exists(fld):
         os.makedirs(fld)
 
@@ -95,6 +101,7 @@ def data_graph(li, rankType):
     if not files:
         logging.info('data files are empty')
         return
+
     files.sort()
     infile = os.path.join(fld, files[-1])
     outfile = infile[:-4]
@@ -110,6 +117,7 @@ def data_graph(li, rankType):
         out_bytes = subprocess.check_output(cmd, stderr=subprocess.STDOUT,
                                             shell=True)
         logging.info('save files: ' + outfile)
+
     except subprocess.CalledProcessError as e:
         out_bytes = e.output
         # code = e.returncode

@@ -21,7 +21,7 @@ def zhaihehe(args):
         return crawl()
 
     if not args.list:
-        args.list = '0'
+        args.list = '8'
     if args.list not in config['list'].keys() \
        and args.list not in config['list'].values():
         print("List has to be set properly with -l/--list.")
