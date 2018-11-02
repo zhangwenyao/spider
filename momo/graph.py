@@ -24,7 +24,7 @@ def graph(rankType=None):
         rankStarHour_day_graph()
 
     if rankType == 'rankStarHour2':
-        # rankStarHour2_static()
+        rankStarHour2_static()
         rankStarHour2_day_graph()
 
 
