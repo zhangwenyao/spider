@@ -42,6 +42,10 @@ def crawl_1():
 
 
 def crawl():
+    exact_time = datetime.utcnow() + timedelta(hours=8)
+    if exact_time.hour < 23:
+        return
+
 
     appId = '189'
 

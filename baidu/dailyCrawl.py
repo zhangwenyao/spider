@@ -11,6 +11,10 @@ config = systemconfig.config
 
 
 def crawl(li=None):
+    exact_time = datetime.utcnow() + timedelta(hours=8)
+    if exact_time.hour < 23:
+        return
+
     if not li:
         li = config['list']
 

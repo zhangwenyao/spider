@@ -3,6 +3,7 @@
 
 import os
 import logging
+from datetime import datetime
 import subprocess
 from general import config as systemconfig
 
@@ -23,55 +24,8 @@ def graph(rankType=None):
         rankStarHour_day_graph()
 
     if rankType == 'rankStarHour2':
-        rankStarHour2_static()
+        # rankStarHour2_static()
         rankStarHour2_day_graph()
-
-
-def starDay_static():
-    fld = os.path.join('export', config['args'].web)
-    key = 'star-day-join'
-    files = [x for x in os.listdir(fld)
-             if x.startswith(key)
-             and os.path.isfile(os.path.join(fld, x))
-             and os.path.getsize(os.path.join(fld, x)) > 2000
-             and len(x) == len(key) + 1 + 8 + 1 + 8 + 4]
-    if not files:
-        logging.info('data is empty.')
-        return
-
-    files.sort()
-    infile = os.path.join(fld, files[-1])
-
-    filename = os.path.join(fld, files[-1][:-4] + '-means.txt')
-    if os.path.exists(filename):
-        return
-
-    with open(infile, 'r') as f:
-        data = f.readlines()
-
-    # ids = data[0].strip()
-    data = data[2:]
-    data = [x.strip().split() for x in data]
-    if not data:
-        logging.info('data is empty: ' + infile)
-        return
-
-    n = len(data[0])
-    if n <= 1:
-        logging.info('data error, length <= 1: ' + data[0])
-        return
-
-    means = []
-    for x in data:
-        if len(x) != n:
-            logging.info('data length error: ' + x)
-            return
-
-        s = 0
-        for i in x[1:]:
-            s += int(i)
-
-        means.append([x[0], s / (n - 1.0)])
 
 
 def starDay_static():
@@ -522,16 +476,19 @@ def rankStarHour2_day_graph():
     infile = os.path.join(fld, files[-1])
 
     outfile = infile[:-4]
-    if not os.path.exists(outfile + '.eps'):
+    if not os.path.exists(outfile + '.png'):
         try:
             # code = 0
-            sh = os.path.join('script', 'gnuplot_eps_pdf.sh')
+            sh = os.path.join('script', 'gnuplot_png_pdf.sh')
             plt = os.path.join(
                 'config', config['args'].web, 'rankStarHour2-day.plt')
             cmd = '{} {} {} \\"{}\\"'.format(sh, plt, outfile, infile)
             out_bytes = subprocess.check_output(cmd, stderr=subprocess.STDOUT,
                                                 shell=True)
             logging.info('save files: ' + outfile)
+            now = datetime.now()
+            if now.isoweekday() == 5:
+                send_email(infile[-12:-4], outfile + '.png')
 
         except subprocess.CalledProcessError as e:
             out_bytes = e.output
@@ -541,10 +498,10 @@ def rankStarHour2_day_graph():
             logging.debug(out_bytes)
 
     outfile = infile[:-4] + '-log'
-    if not os.path.exists(outfile + '.eps'):
+    if not os.path.exists(outfile + '.png'):
         try:
             # code = 0
-            sh = os.path.join('script', 'gnuplot_eps_pdf.sh')
+            sh = os.path.join('script', 'gnuplot_png_pdf.sh')
             plt = os.path.join(
                 'config', config['args'].web, 'rankStarHour2-day-log.plt')
             cmd = '{} {} {} \\"{}\\"'.format(sh, plt, outfile, infile)
@@ -560,3 +517,42 @@ def rankStarHour2_day_graph():
             logging.debug(out_bytes)
 
 
+import smtplib
+from email.header import Header
+from email.mime.text import MIMEText
+from email.mime.image import MIMEImage
+from email.mime.multipart import MIMEMultipart
+
+
+def send_email(date, img):
+    gmail_config = config['logconfig']['handlers']['gmail']
+    username = gmail_config['credentials'][0]
+    password = gmail_config['credentials'][1]
+    smtp_server = gmail_config['mailhost'][0]
+    smtp_port = gmail_config['mailhost'][1]
+    from_addr = gmail_config['fromaddr']
+    to_addrs = ['zinppy@gmail.com']
+    cc_addrs = gmail_config['toaddrs']
+
+    msg = MIMEMultipart()
+    msg['From'] = from_addr
+    msg['To'] = ', '.join(to_addrs)
+    msg['Cc'] = ', '.join(cc_addrs)
+    msg['Subject'] = Header('陌陌的星光值数据 %s' % date, 'utf-8').encode()
+    msg.attach(MIMEText(
+        '<html><body><h2>陌陌榜单用户最新的收入星光值数据图</h2>' + '<p><img src="cid:0"></p>'
+        + '</body></html>', 'html', 'utf-8'))
+    with open(img, 'rb') as f:
+        mime = MIMEImage(f.read())
+        mime.add_header('Content-Disposition', 'attachment', filename=img)
+        mime.add_header('Content-ID', '<0>')
+        mime.add_header('X-Attachment-Id', '0')
+        msg.attach(mime)
+
+    server = smtplib.SMTP(smtp_server, smtp_port)
+    server.starttls()
+    # server.set_debuglevel(1)
+    server.login(username, password)
+    server.sendmail(from_addr, to_addrs + cc_addrs, msg.as_string())
+    server.quit()
+    return

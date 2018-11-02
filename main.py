@@ -74,6 +74,7 @@ def main_load_config(args):
     log['handlers']['file']['filename'] = os.path.join(
         systemconfig.config['folders']['logdir'], log['handlers']['file']['filename'])
     logging.config.dictConfig(log)
+    # logging.getLogger("requests").setLevel(logging.WARNING)
     return
 
 

@@ -83,8 +83,8 @@ def rank_static(rankType, dateType):
         with open(os.path.join(inFld, d), 'r') as f:
             datas = f.readlines()
         datas = [x.split('\t') for x in datas]
-        if len(datas) != 31:
-            logging.info('file length != 31 error: ' + d)
+        if len(datas) != 31 and len(datas) != 51:
+            logging.info('file length != 31 or 51 error: ' + d)
             means.append(['#' + d[0:13], -1])
             continue
         if 'cnt' not in datas[0]:

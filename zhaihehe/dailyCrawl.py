@@ -6,6 +6,10 @@ from zhaihehe.lists import crawl as listsCrawl
 
 
 def crawl():
+    exact_time = datetime.utcnow() + timedelta(hours=8)
+    if exact_time.hour < 23:
+        return
+
     lists = ('0', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13')
 
     # day
