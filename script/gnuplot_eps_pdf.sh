@@ -1,5 +1,5 @@
 #!/bin/bash
-#./gnuplot_eps_pdf.sh graph.plt outfile [...]
+#./gnuplot_eps_pdf.sh graph.plt outfile [\"data.txt\" ...]
 
 
 if [ $# -lt 2 ];then
